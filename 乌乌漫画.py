@@ -9,7 +9,6 @@
 import requests
 import urllib.request
 from lxml import etree
-import urllib.request
 from pathlib import Path
 
 class Spider(object):
@@ -37,6 +36,7 @@ class Spider(object):
             pass
         else:
             path.mkdir()
+
         chapterLinks = ret.xpath('//a[@class="j-chapter-link"]/@data-hreflink')
         print(chapterLinks)
         chapterLinks.reverse()
@@ -79,6 +79,24 @@ class Spider(object):
             index = index + 1
             print("正在下载%s" % img)
 
-url = 'https://www.mkzhan.com/213887/'
+    def get_chapter(self, url):
+        headers = {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'zh-CN,zh;q=0.8',
+            'Cache-Control': 'no-cache',
+            'Host': 'python2050.applinzi.com',
+            'Origin': 'http://python2050.applinzi.com',
+            'Referer': 'http://python2050.applinzi.com/Cartoon/Read?CartoonId=502&chapterId=25195'
+        }
+        url = 'http://python2050.applinzi.com/Cartoon/GetContent?chapterId=25195&typeId=0&cIndex=3&ifCheck=1&cartoonId=502&isBuy=1&sId=502'
+        response = requests.post(url=url, headers=headers)
+        print(response.url)
+        print(response.text)
+
+url = 'https://www.mkzhan.com/49733/'
 spider = Spider()
-spider.init_spider(url)
+spider.get_chapter(url)

@@ -79,6 +79,6 @@ class Spider(object):
             index = index + 1
             print("正在下载%s" % img)
 
-url = 'https://www.mkzhan.com/213887/'
+url = 'https://www.mkzhan.com/49733/'
 spider = Spider()
 spider.init_spider(url)

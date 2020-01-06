@@ -16,7 +16,7 @@ class Spider(object):
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
     }
-    web_url = 'https://www.mkzhan.com'
+    web_url = 'http://www.kuman5.com'
     comic_save_path = ''
     chapter_save_path = ''
 
@@ -29,7 +29,7 @@ class Spider(object):
         html = html.encode('gbk', "ignore").decode('gbk')  # 先用gbk编码,忽略掉非法字符,然后再译码
         html = html.encode('utf-8').decode('utf-8')
         ret = etree.HTML(html)
-        title_list = ret.xpath('//p[@class="comic-title j-comic-title"]')
+        title_list = ret.xpath('//div[@class="info"]/h1')
         comic_title = title_list[0].text
         self.comic_save_path = "comic\\" + comic_title
         path = Path(self.comic_save_path)
@@ -37,7 +37,7 @@ class Spider(object):
             pass
         else:
             path.mkdir()
-        chapterLinks = ret.xpath('//a[@class="j-chapter-link"]/@data-hreflink')
+        chapterLinks = ret.xpath('//ul[@id="detail-list-select-1"]/li/a/@href')
         print(chapterLinks)
         chapterLinks.reverse()
         self.chapter_request(chapterLinks)
@@ -55,16 +55,17 @@ class Spider(object):
                 # print(parse)
                 treee = etree.HTML(parse)
 
-                chapter_title = treee.xpath('//h1[@class="comic-title"]/a[@class="last-crumb"]/text()')
-                print(chapter_title[0])
+                chapter_title = treee.xpath('//h1[@class="title"]/text()')
+                print(chapter_title)
                 self.chapter_save_path = self.comic_save_path + '\\' + chapter_title[0]
                 path = Path(self.chapter_save_path)
                 if path.exists():
                     pass
                 else:
                     path.mkdir()
-                image = treee.xpath('//div[@class="rd-article__pic hide"]/img[@class="lazy-read"]/@data-src')
-                self.download_image(image)
+                scripts = treee.xpath('//script/text()')
+                print(scripts[3].split('img_url=')[1])
+                self.download_image(scripts)
 
             except Exception as e:
                 print(e)
@@ -79,6 +80,6 @@ class Spider(object):
             index = index + 1
             print("正在下载%s" % img)
 
-url = 'https://www.mkzhan.com/213887/'
+url = 'http://www.kuman5.com/10307/'
 spider = Spider()
 spider.init_spider(url)
