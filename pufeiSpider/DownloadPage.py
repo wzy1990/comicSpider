@@ -3,7 +3,6 @@
 # pip install fake-useragent
 import os
 import re
-
 import bs4
 import execjs
 import fake_useragent
