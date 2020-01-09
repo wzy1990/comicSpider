@@ -10,7 +10,9 @@ import requests
 import urllib.request
 from lxml import etree
 import urllib.request
+import os
 from pathlib import Path
+
 
 class Spider(object):
     headers = {
@@ -20,8 +22,7 @@ class Spider(object):
     comic_save_path = ''
     chapter_save_path = ''
 
-    def init_spider(self, url):
-
+    def init_spider(self, url, chapter_num):
         r = requests.get(url, headers=self.headers, timeout=5)
         r.encoding = r.apparent_encoding
         r.raise_for_status()
@@ -37,14 +38,16 @@ class Spider(object):
             pass
         else:
             path.mkdir()
-        chapterLinks = ret.xpath('//a[@class="j-chapter-link"]/@data-hreflink')
-        print(chapterLinks)
-        chapterLinks.reverse()
-        self.chapter_request(chapterLinks)
+        chapter_links = ret.xpath('//a[@class="j-chapter-link"]/@data-hreflink')
+        chapter_links.reverse()
+        list_len = len(chapter_links)
+        chapter_links = chapter_links[chapter_num:list_len]
+        # print(chapter_links)
+        self.chapter_request(chapter_links)
 
     # 遍历章节列表
-    def chapter_request(self, chapterLinks):
-        for link in chapterLinks:
+    def chapter_request(self, chapter_links):
+        for link in chapter_links:
             link = self.web_url + link
             print(link)
             try:
@@ -52,33 +55,36 @@ class Spider(object):
                 parse = t.text
                 parse = parse.encode('gbk', "ignore").decode('gbk')  # 先用gbk编码,忽略掉非法字符,然后再译码
                 parse = parse.encode('utf-8').decode('utf-8')
-                # print(parse)
-                treee = etree.HTML(parse)
-
-                chapter_title = treee.xpath('//h1[@class="comic-title"]/a[@class="last-crumb"]/text()')
-                print(chapter_title[0])
+                html = etree.HTML(parse)
+                chapter_title = html.xpath('//h1[@class="comic-title"]/a[@class="last-crumb"]/text()')
+                print('当前章节： ', chapter_title[0])
                 self.chapter_save_path = self.comic_save_path + '\\' + chapter_title[0]
                 path = Path(self.chapter_save_path)
                 if path.exists():
                     pass
                 else:
                     path.mkdir()
-                image = treee.xpath('//div[@class="rd-article__pic hide"]/img[@class="lazy-read"]/@data-src')
+                image = html.xpath('//div[@class="rd-article__pic hide"]/img[@class="lazy-read"]/@data-src')
                 self.download_image(image)
-
             except Exception as e:
                 print(e)
 
     # 3. 下载章节的图片
-    def download_image(self, image):
+    def download_image(self, image_list):
         index = 1
-        for img in image:
-            image_url = self.chapter_save_path + '\\' + str(index) + '.jpg'
-            print(image_url)
-            s = urllib.request.urlretrieve(img, image_url)
-            index = index + 1
-            print("正在下载%s" % img)
+        for img_url in image_list:
+            image_path = self.chapter_save_path + '\\' + str(index) + '.jpg'
+            if os.path.isfile(image_path):
+                print("此图已经存在:", image_path)
+            else:
+                print("图片正在下载:", image_path)
+                urllib.request.urlretrieve(img_url, image_path)
+            index += 1
 
-url = 'https://www.mkzhan.com/213887/'
+
+# 漫画地址
+url = 'https://www.mkzhan.com/213887/'  # 琅琊榜
+# 第几章节开始
+chapter_num = 58
 spider = Spider()
-spider.init_spider(url)
+spider.init_spider(url, chapter_num)

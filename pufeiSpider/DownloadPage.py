@@ -60,9 +60,12 @@ class DownloadPage:
     def download_chapter(self, url, chapter_name, dir_path):
         content = self.get_content(url)
         search_obj = re.findall(r'packed="(.+)";eval', content, re.S)
-        print(search_obj)
+        print(search_obj[0])
         count = 1
-        for url2 in self.base_64_decode(search_obj[0]):
+        url_list = self.base_64_decode(search_obj[0])
+        print(url_list)
+        for url2 in url_list:
+            print(url2)
             if isinstance(url2, str):
                 if url2:
                     image_path = dir_path + '/' + chapter_name + '/P-%s.jpg' % count
@@ -76,8 +79,8 @@ class DownloadPage:
                                 count += 1
 
 
-url = "http://www.pufei.net/manhua/173/"
-save_path = "G:/manhua"
+url = "http://www.pufei.net/manhua/205/"
+save_path = "D:/manhua"
 
 downloadPage = DownloadPage()
 content = downloadPage.get_page_chapter(url, save_path)

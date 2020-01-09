@@ -1,6 +1,7 @@
 # 爬取动漫屋https://www.dm5.com/
 # 通过TXT里设置好的分类及对应URL遍历
 # 首先爬取类别链接并创建大类文件夹
+# pip install beautifulSoup4
 # pip install pandas
 import requests
 import os

@@ -23,8 +23,8 @@ class Spider(object):
 
     def init_spider(self, url):
 
-        r = requests.get(url, headers=self.headers, timeout=5)
-        r.encoding = r.apparent_encoding
+        r = requests.get(url, headers=self.headers, timeout=50)
+        # r.encoding = r.apparent_encoding
         r.raise_for_status()
         html = r.text
         html = html.encode('gbk', "ignore").decode('gbk')  # 先用gbk编码,忽略掉非法字符,然后再译码
@@ -33,7 +33,7 @@ class Spider(object):
         title_list = ret.xpath('//div[@class="ncp1b_div ncp1b_tit"]/h1')
         comic_title = title_list[0].text
         print(comic_title)
-        self.comic_save_path = "comic\\" + comic_title
+        self.comic_save_path = "comic\\奇妙漫画\\" + comic_title
         path = Path(self.comic_save_path)
         if path.exists():
             pass
@@ -49,8 +49,7 @@ class Spider(object):
     # 遍历章节列表
     def chapter_request(self, chapterLinks, chapterTitles):
         for link, title in zip(chapterLinks, chapterTitles):
-            print(link)
-            print(title)
+            print(title, link)
             self.chapter_save_path = self.comic_save_path + '\\' + title
             path = Path(self.chapter_save_path)
             if path.exists():
@@ -59,7 +58,6 @@ class Spider(object):
                 path.mkdir()
             try:
                 link = link.replace('/manhua/', '').split('/')
-                print(link)
                 url = 'https://m.qimiaomh.com/Action/Play/AjaxLoadImgUrl?did=' + link[0] + '&sid=' + link[1].replace('.html', '') + '&tmp=0.5955032991116953'
                 response = requests.post(url=url, headers=self.headers)
                 print(response.url)
@@ -70,17 +68,21 @@ class Spider(object):
                 print(e)
 
     # 3. 下载章节的图片
-    def download_image(self, image):
-        for img_url in image:
+    def download_image(self, image_list):
+        for img_url in image_list:
             img_name = img_url.replace('https://mh1.88bada.com/upload/', '').split('/')[2]
             image_path = self.chapter_save_path + '\\' + img_name
 
             if os.path.isfile(image_path):
-                print("此图已经下载:", image_path)
+                print("此图已经存在:", image_path)
             else:
                 print("图片正在下载:", image_path)
-                urllib.request.urlretrieve(img_url, image_path)
+                try:
+                    urllib.request.urlretrieve(img_url, image_path)
+                except:
+                    pass
 
-url = 'https://m.qimiaomh.com/manhua/4984.html'
+
+url = 'https://m.qimiaomh.com/manhua/2978.html'
 spider = Spider()
 spider.init_spider(url)

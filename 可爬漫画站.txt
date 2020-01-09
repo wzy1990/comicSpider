@@ -1,16 +1,20 @@
 1.漫客栈 https://www.mkzhan.com （已经搞定，VIP可爬）
+2.阅漫网 http://dlmh02.com/ （已经搞定，VIP可爬）
+3.奇妙漫画 https://m.qimiaomh.com/ （已经搞定）
+4.漫画牛 https://m.manhuaniu.com/ （基本完成)
+4.酷漫屋 http://www.kuman5.com/ （需要破解base64解码，才能拿到图片链接 ，类同扑飞漫画站）
 
-3.酷漫屋 http://www.kuman5.com/
 
-4.漫画台 https://www.manhuatai.com/（部分搞定）
-    看漫画 https://www.kanman.com/
-    爱优漫 https://www.iyouman.com/
-    神漫画 https://www.taomanhua.com/
-    酷漫网 http://www.kuman.com http://www.kumanhua.net/
+====漫画台 https://www.manhuatai.com/（部分搞定，需要寻找规律）
+    ----看漫画 https://www.kanman.com/（同上）
+    ----爱优漫 https://www.iyouman.com/（同上）
+    ----神漫画 https://www.taomanhua.com/（同上）
+    ----酷漫网 http://www.kuman.com http://www.kumanhua.net/（同上）
 
-5.阅漫网 http://dlmh02.com/
-6.污污漫画 http://python2050.applinzi.com
-有米漫画 https://www.ymr18.com
+====污污漫画 http://python2050.applinzi.com （VIP没法爬）
 
-奇妙漫画 https://m.qimiaomh.com/ （已经搞定）
-漫画牛 https://m.manhuaniu.com/
+有米漫画 https://www.ymr18.com （不行）
+
+一本漫画 https://www.ybmh1.com/ （电脑打不了，手机可以）
+
+顶通漫画 https://www.toptoon8.com/  https://m.toptoon.vip/
