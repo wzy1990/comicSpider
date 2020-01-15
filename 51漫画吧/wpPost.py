@@ -1,18 +1,16 @@
-# 带有自定义栏目字段的发布文章代码
+# 发布带有自定义栏目字段的发布文章代码
 # pip install python-wordpress-xmlrpc
 # coding:utf-8
-import datetime
+# import datetime
 import csv
-import pypinyin
 import random
 import requests
 from bs4 import BeautifulSoup as bs
 from wordpress_xmlrpc import Client, WordPressPost
-from wordpress_xmlrpc.methods.users import GetUserInfo
-from wordpress_xmlrpc.methods import posts, media
-from wordpress_xmlrpc.methods import taxonomies
-from wordpress_xmlrpc import WordPressTerm
-from wordpress_xmlrpc.compat import xmlrpc_client
+# from wordpress_xmlrpc.methods.users import GetUserInfo
+from wordpress_xmlrpc.methods import posts
+# from wordpress_xmlrpc.methods import taxonomies
+# from wordpress_xmlrpc import WordPressTerm
 import importlib, sys
 import pandas as pd
 from datetime import datetime
@@ -20,7 +18,7 @@ from datetime import datetime
 importlib.reload(sys)
 
 class WpPost(object):
-    homepath = 'G:\\comic资源'
+    homepath = 'comic资源'
     leimu = '港台漫画'
     begin_line = 2 # 第几行开始
     end_line = 100 # 结束行
@@ -31,15 +29,8 @@ class WpPost(object):
         'referer': 'https://www.dm5.com/',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
     }
-    wp = Client('http://47.112.130.142/xmlrpc.php', 'admin_wzy', 'admin_wzy19900420')
-
-    # 不带声调的(style=pypinyin.NORMAL)
-    def pinyin(self, word):
-        pin_yin = ''
-        print(self.pinyin(word))
-        for i in pypinyin.pinyin(word, style=pypinyin.NORMAL):
-            pin_yin += ''.join(i)
-        return pin_yin
+    wp = Client('http://51mhb.com/xmlrpc.php', 'wzyManhua', 'wzy19900420')
+    # wp = Client('http://47.112.130.142/xmlrpc.php', 'admin_wzy', 'admin_wzy19900420')
 
     # 初始化
     def init_spider(self, leimu, begin_line, end_line, step):
@@ -47,7 +38,7 @@ class WpPost(object):
         self.begin_line = begin_line  # 第几行开始
         self.end_line = end_line  # 结束行
         self.step = step  # 结束行
-        self.getDatas2()
+        self.getDatas()
 
     # 获取网页信息
     def get_html(self, url):
@@ -59,21 +50,11 @@ class WpPost(object):
     def getDatas(self):
         with open(self.homepath + '\\' + self.leimu + '\\漫画信息表.csv', 'r', encoding='gbk') as csv_file:
             csv_reader_lines = csv.reader(csv_file)
-            index = 1
-            for new_blog in csv_reader_lines:
-                print(new_blog)
-                if self.begin_line <= index <= self.end_line:
-                    self.postBlog(new_blog)
-                index += 1
-            self.saveData()
-    def getDatas2(self):
-        data = pd.read_csv(self.homepath + '\\' + self.leimu + '\\漫画信息表.csv', encoding='gbk', header=None)
-        # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
-        csv_reader_lines = data.values.tolist()
-        for index in range(self.begin_line, self.end_line, self.step):
-            self.postBlog(csv_reader_lines[index])
+            for index in range(self.begin_line, self.end_line, self.step):
+                self.postBlog(csv_reader_lines[index])
 
     def postBlog(self, new_blog):
+        print('正在发布：', new_blog[1])
         post = WordPressPost()
         # post.post_ID = new_blog[0]
         # post.id = new_blog[0]
@@ -89,10 +70,14 @@ class WpPost(object):
             comic_html = self.get_html(new_blog[7])
             # 漫画详情信息区域
             comic_detail = comic_html.find('div', {'class': 'banner_detail_form'})
-
+            # 漫画封面
+            comic_img = comic_detail.find('div', {'class': 'cover'}).find('img')['src']
+            comic_cover = '<img src="' + comic_img + '" alt="" class="aligncenter size-full wp-image-154" />'
+            new_blog[3] = comic_img
             # 漫画内容简介
             comic_content = comic_detail.find('p', {'class': 'content'}).text
-            post.content = '<blockquote style="text-indent: 30px;">' + comic_content.replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '') + '</blockquote>' + comic_cover
+            comic_content = comic_content.replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
+            post.content = '<blockquote style="text-indent: 30px;">' + comic_content + '</blockquote>' + comic_cover
             # 连载状态，及分类
             comic_info_list = comic_detail.find_all('span', {'class': 'block'})
             if comic_info_list[1].find('span') != None:
@@ -104,7 +89,8 @@ class WpPost(object):
                 'category': [self.leimu]  # 文章所属分类，没有则自动创建
             }
         except:
-            post.content = '<blockquote style="text-indent: 30px;">' + new_blog[4].replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '') + '</blockquote>' + comic_cover
+            new_blog[4] = new_blog[4].replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
+            post.content = '<blockquote style="text-indent: 30px;">' + new_blog[4] + '</blockquote>' + comic_cover
             post.terms_names = {
                 'post_tag': [comic_type],  # 文章所属标签，没有则自动创建
                 'category': [self.leimu]  # 文章所属分类，没有则自动创建
@@ -131,11 +117,11 @@ class WpPost(object):
             }]
         })
         # 资源下载次数
-        post.custom_fields.append({ 'key': 'cao_paynum', 'value': random.randint(20, 100) })
+        post.custom_fields.append({ 'key': 'cao_paynum', 'value': random.randint(1, 50) })
         # 资源下载密码
-        post.custom_fields.append({ 'key': 'cao_pwd', 'value': '51zyb' })
+        post.custom_fields.append({ 'key': 'cao_pwd', 'value': 'www.51mhb.com' })
         # 自定义按钮
-        post.custom_fields.append({ 'key': 'cao_diy_btn', 'value': '查看更多资源|https://www.51zyb.com/' })
+        post.custom_fields.append({ 'key': 'cao_diy_btn', 'value': '查看更多资源|http://www.51mhb.com/' })
         post.custom_fields.append({  # 资源其他信息
             'key': 'cao_info',
             'value': [{
@@ -153,16 +139,30 @@ class WpPost(object):
             }]
         })
         try:
-            new_blog[0] = self.wp.call(posts.NewPost(post))
-            self.saveData(new_blog)
+            self.wp.call(posts.NewPost(post))
         except:
             pass
 
-    def saveData(self, blog):
-        with open(self.homepath + '\\' + self.leimu + '\\漫画信息表.txt', 'a', encoding='utf8') as f:
-            line_content = ';;'.join((str(x) for x in blog))
-            # print(line_content)
-            f.write(line_content + '\n')
+    def saveData(self):
+        blog_list = self.wp.call(posts.GetPosts({'offset': 0, 'number': 663}))
+        post_list = []
+        csv_title = ['漫画ID', '标题']
+        for blog in blog_list:
+            post_list.append([blog.id, blog.title])
+        post_data = pd.DataFrame(columns=csv_title, data=post_list)
+        post_data.to_csv('已发布的漫画列表.csv', encoding='UTF-8')  # , mode='a', header=False
+
+    def updateBlog(self):
+        post = WordPressPost()
+        post.title = '赤蝎13'
+        post.post_status = 'draft'
+        self.wp.call(posts.EditPost(1363, post))
+        # with open('已发布的漫画列表.csv', 'r', encoding='UTF-8') as csv_file:
+        #     csv_reader_lines = csv.reader(csv_file)
+        #     for blog in csv_reader_lines:
+        #         post = WordPressPost()
+        #         post.post_status = 'draft'
+        #         self.wp.call(posts.EditPost(blog[1], post))
 
     # 新建标签
     # tag = WordPressTerm()
@@ -181,10 +181,11 @@ class WpPost(object):
 startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
-# wpPost.init_spider('港台漫画', 500, 400, -1) # 1
+wpPost.updateBlog()
+# wpPost.init_spider('港台漫画', 450, 96, -1) # 1
 # wpPost.init_spider('欧美漫画', 1770, 1700, -1) # 1
 # wpPost.init_spider('日韩漫画', 5200, 5100, -1) # 1
-wpPost.init_spider('大陆漫画', 1434, 1400, -1) # 1
+# wpPost.init_spider('大陆漫画', 1434, 1400, -1) # 1
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)
 print("##################全部下载完成!##################")

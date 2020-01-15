@@ -23,7 +23,7 @@ class Spider(object):
     chapter_save_path = ''
 
     def init_spider(self, url, chapter_num):
-        r = requests.get(url, headers=self.headers, timeout=5)
+        r = requests.get(url, headers=self.headers, timeout=50)
         r.encoding = r.apparent_encoding
         r.raise_for_status()
         html = r.text

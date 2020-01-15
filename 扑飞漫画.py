@@ -79,7 +79,7 @@ class DownloadPage:
                                 count += 1
 
 
-url = "http://www.pufei.net/manhua/205/"
+url = "http://www.pufei.net/manhua/419/"
 save_path = "D:/manhua"
 
 downloadPage = DownloadPage()
