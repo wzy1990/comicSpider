@@ -152,17 +152,23 @@ class WpPost(object):
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
         post_data.to_csv('已发布的漫画列表.csv', encoding='UTF-8')  # , mode='a', header=False
 
+    # 将已发布文章批量修改为草稿状态
+    def updatePost(self):
+        blog_list = self.wp.call(posts.GetPosts({'offset': 0, 'number': 661, 'post_status': 'publish'}))
+        for blog in blog_list:
+            post = WordPressPost()
+            post.title = blog.title
+            post.post_status = 'draft'
+            print('当前编辑文章：', blog.title)
+            self.wp.call(posts.EditPost(blog.id, post))
+
     def updateBlog(self):
-        post = WordPressPost()
-        post.title = '赤蝎13'
-        post.post_status = 'draft'
-        self.wp.call(posts.EditPost(1363, post))
-        # with open('已发布的漫画列表.csv', 'r', encoding='UTF-8') as csv_file:
-        #     csv_reader_lines = csv.reader(csv_file)
-        #     for blog in csv_reader_lines:
-        #         post = WordPressPost()
-        #         post.post_status = 'draft'
-        #         self.wp.call(posts.EditPost(blog[1], post))
+        with open('已发布的漫画列表.csv', 'r', encoding='UTF-8') as csv_file:
+            csv_reader_lines = csv.reader(csv_file)
+            for blog in csv_reader_lines:
+                post = WordPressPost()
+                post.post_status = 'draft'
+                self.wp.call(posts.EditPost(blog[1], post))
 
     # 新建标签
     # tag = WordPressTerm()
@@ -181,7 +187,7 @@ class WpPost(object):
 startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
-wpPost.updateBlog()
+wpPost.updatePost()
 # wpPost.init_spider('港台漫画', 450, 96, -1) # 1
 # wpPost.init_spider('欧美漫画', 1770, 1700, -1) # 1
 # wpPost.init_spider('日韩漫画', 5200, 5100, -1) # 1

@@ -6,7 +6,7 @@ from numpy import *
 from bs4 import BeautifulSoup as bs
 
 header = {
-    'Referer': 'https://www.dm5.com/',
+    'Referer': 'https://www.pdf5.net/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 UBrowser/6.2.3964.2 Safari/537.36'
 }
 
@@ -28,9 +28,9 @@ def judgeName(name):
 # 用于爬取的漫画信息
 def CrawModel(url):
     post_list = []
-    csv_title = ['标题', '内容', '漫画页地址']
+    csv_title = ['标题', '作者', '类型', '是否完结', '下载地址', '密码', '内容', '漫画页地址']
 
-    for page_num in range(1, 13):
+    for page_num in range(1, 3):
         if page_num == 1:
             curl = url.format('')  # 分类的第一页，可以不用构造
         else:
@@ -62,9 +62,9 @@ def CrawModel(url):
                 comic_detail.style.decompose()
                 comic_detail.find('div', {'class': 'erphpdown-box'}).decompose()
                 comic_content = comic_detail.prettify()
-                print(comic_content)
+                # print(comic_content)
                 # 缓存这一条文章的全部信息，以备保存到CSV
-                post_list.append([comic_title, comic_content, comic_url])
+                post_list.append([comic_title, '', '其他', '完结', '', '', comic_content, comic_url])
 
                 time.sleep(0.4)
                 i_num += 1
@@ -72,11 +72,11 @@ def CrawModel(url):
             print('异常')
 
     post_data = pd.DataFrame(columns=csv_title, data=post_list)
-    post_data.to_csv('comic_list.csv', encoding='UTF-8')
+    post_data.to_csv('comic_list4.csv', encoding='UTF-8')
 
 
 def main():
-   CrawModel('https://www.pdf5.net/category/manhua{}?c2=8&c3&t')
+   CrawModel('https://www.pdf5.net/category/manhua{}?c2=10&c3&t')
 
 
 if __name__ == "__main__":

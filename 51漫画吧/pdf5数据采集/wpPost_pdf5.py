@@ -21,6 +21,8 @@ class WpPost(object):
     begin_line = 2 # 第几行开始
     end_line = 100 # 结束行
     step = 1
+    comic_path = 'comic_list.csv'
+    category = '大陆漫画'
     header = {
         'cookie': 'Hm_lvt_dbc355aef238b6c32b43eacbbf161c3c=1536981553; Hm_lpvt_dbc355aef238b6c32b43eacbbf161c3c=1536986863',
         'referer': 'https://www.dm5.com/',
@@ -29,10 +31,12 @@ class WpPost(object):
     wp = Client('http://51mhb.com/xmlrpc.php', 'wzyManhua', 'wzy19900420')
 
     # 初始化
-    def init_spider(self, begin_line, end_line, step):
+    def init_spider(self, begin_line, end_line, step, comic_path, category):
         self.begin_line = begin_line  # 第几行开始
         self.end_line = end_line  # 结束行
         self.step = step  # 结束行
+        self.comic_path = comic_path
+        self.category = category
         self.getDatas()
 
     # 获取网页信息
@@ -44,7 +48,7 @@ class WpPost(object):
 
     def getDatas(self):
         # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
-        data = pd.read_csv('comic_list.csv', encoding='gbk', header=None)
+        data = pd.read_csv(self.comic_path, encoding='gbk', header=None)
         csv_reader_lines = data.values.tolist()
         for index in range(self.begin_line, self.end_line, self.step):
             print(csv_reader_lines[index])
@@ -59,7 +63,8 @@ class WpPost(object):
         post.content = new_blog[7]
         post.terms_names = {
             'post_tag': [new_blog[3]],  # 文章所属标签，没有则自动创建
-            'category': ['日韩漫画']  # 文章所属分类，没有则自动创建
+            # 'category': ['日韩漫画']  # 文章所属分类，没有则自动创建
+            'category': [self.category]
         }
         post.custom_fields = []  # 自定义字段列表
         # 资源价格
@@ -70,21 +75,13 @@ class WpPost(object):
         post.custom_fields.append({'key': 'cao_is_boosvip', 'value': 0})
         # 启用付费下载资源
         post.custom_fields.append({'key': 'cao_status', 'value': 1})
-        post.custom_fields.append({  # 资源类型
-            'key': 'wppay_type',
-            'value': 4
-        })
-        post.custom_fields.append({  # 资源下载地址
-            'key': 'cao_downurl',
-            'value': [{
-                'name': '立即下载',
-                'url': new_blog[5]
-            }]
-        })
+        post.custom_fields.append({'key': 'wppay_type', 'value': 4})
+        # 资源下载地址
+        post.custom_fields.append({'key': 'cao_downurl', 'value': new_blog[5]})
         # 资源下载密码
         post.custom_fields.append({'key': 'cao_pwd', 'value': new_blog[6]})
         # 资源下载次数
-        post.custom_fields.append({ 'key': 'cao_paynum', 'value': random.randint(1, 50) })
+        post.custom_fields.append({'key': 'cao_paynum', 'value': random.randint(1, 50)})
         post.custom_fields.append({  # 资源其他信息
             'key': 'cao_info',
             'value': [{
@@ -103,11 +100,30 @@ class WpPost(object):
         except:
             pass
 
+    def updateBlog(self, begin, end, comic_path):
+        # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
+        data = pd.read_csv(self.comic_path, encoding='gbk', header=None)
+        csv_reader_lines = data.values.tolist()
+        print(csv_reader_lines[0])
+        for index in range(begin, end):
+            post = WordPressPost()
+            blog = csv_reader_lines[index]
+            post.title = blog[1]
+            post.custom_fields = {
+                'cao_downurl': blog[5]
+            }  # 自定义字段列表
+            print(blog[1])
+            print(blog[5])
+            print(int(blog[0]))
+            # post.post_status = 'publish'
+            self.wp.call(posts.EditPost(int(blog[0]), post))
 
 startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
-wpPost.init_spider(1, 21, 1)
+# 日韩漫画
+wpPost.init_spider(63, 80, 1, 'comic_list.csv', '日韩漫画')
+# wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)
 print("##################全部下载完成!##################")
