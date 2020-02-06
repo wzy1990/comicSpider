@@ -5,7 +5,6 @@
 import csv
 import random
 import requests
-from bs4 import BeautifulSoup as bs
 from wordpress_xmlrpc import Client, WordPressPost
 # from wordpress_xmlrpc.methods.users import GetUserInfo
 from wordpress_xmlrpc.methods import posts
@@ -122,7 +121,7 @@ startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
 # 日韩漫画
-wpPost.init_spider(63, 80, 1, 'comic_list.csv', '日韩漫画')
+wpPost.init_spider(82, 119, 1, 'comic_list.csv', '日韩漫画')
 # wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)

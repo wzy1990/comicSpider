@@ -2,5 +2,6 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/51漫画吧/comic资源/url.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/51漫画吧/pdf5数据采集/comic_list.csv" charset="GBK" />
   </component>
 </project>

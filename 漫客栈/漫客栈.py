@@ -18,12 +18,13 @@ class Spider(object):
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
     }
+    comic_url = 'https://www.mkzhan.com/{}/'
     web_url = 'https://www.mkzhan.com'
     comic_save_path = ''
     chapter_save_path = ''
 
-    def init_spider(self, url, chapter_num):
-        r = requests.get(url, headers=self.headers, timeout=50)
+    def init_spider(self, comic_id, chapter_num):
+        r = requests.get(self.comic_url.format(comic_id), headers=self.headers, timeout=50)
         r.encoding = r.apparent_encoding
         r.raise_for_status()
         html = r.text
@@ -73,7 +74,11 @@ class Spider(object):
     def download_image(self, image_list):
         index = 1
         for img_url in image_list:
-            image_path = self.chapter_save_path + '\\' + str(index) + '.jpg'
+            if index < 10:
+                pic_name = '0' + str(index)
+            else:
+                pic_name = str(index)
+            image_path = self.chapter_save_path + '\\' + pic_name + '.jpg'
             if os.path.isfile(image_path):
                 print("此图已经存在:", image_path)
             else:
@@ -82,9 +87,12 @@ class Spider(object):
             index += 1
 
 
-# 漫画地址
-url = 'https://www.mkzhan.com/213887/'  # 琅琊榜
+# 漫画id
+comic_id = input('请输入你需要下载的漫画ID：')
 # 第几章节开始
-chapter_num = 58
+chapter_num = int(input('请输入开始章节：'))
 spider = Spider()
-spider.init_spider(url, chapter_num)
+spider.init_spider(comic_id, chapter_num)
+
+# '213887' 琅琊榜
+# '208670' 风起苍岚

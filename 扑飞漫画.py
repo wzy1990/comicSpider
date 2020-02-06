@@ -1,4 +1,5 @@
 # coding:utf-8
+# pip install bs4
 # pip install PyExecJS
 # pip install fake-useragent
 import os
@@ -36,7 +37,7 @@ class DownloadPage:
             if chapter:
                 # print(chapter.get("href"))
                 # print(chapter.get_text())
-                self.download_chapter('http://www.pufei.net' + chapter.get("href"), chapter.get_text(), dir_path)
+                self.download_chapter('http://ipufei.com' + chapter.get("href"), chapter.get_text(), dir_path)
 
     def get_js(self):
         f = open("base64decode.js", 'r', encoding='utf-8')
@@ -79,7 +80,7 @@ class DownloadPage:
                                 count += 1
 
 
-url = "http://www.pufei.net/manhua/419/"
+url = "http://ipufei.com/manhua/419/"
 save_path = "D:/manhua"
 
 downloadPage = DownloadPage()
