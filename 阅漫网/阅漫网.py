@@ -77,6 +77,7 @@ class Spider(object):
     # 3. 下载章节的图片
     def download_image(self, image_list):
         index = 1
+        print(image_list)
         for img_url in image_list:
             image_path = self.chapter_save_path + '\\' + str(index) + '.jpg'
 
@@ -84,7 +85,10 @@ class Spider(object):
                 print("此图已经存在:", image_path)
             else:
                 try:
-                    urllib.request.urlretrieve(img_url, image_path)
+                    pic_data = requests.get(img_url, headers=self.headers, timeout=50)
+                    with open(image_path, 'wb') as f:
+                        f.write(pic_data.content)
+                    # urllib.request.urlretrieve(img_url, image_path)
                     print("图片下载成功:", image_path)
                 except:
                     print("图片下载失败:", image_path)

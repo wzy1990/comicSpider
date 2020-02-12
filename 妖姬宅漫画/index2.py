@@ -7,7 +7,7 @@ import pandas as pd
 
 class Spider(object):
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3439.132 Safari/537.36'
     }
     url_all = 'http://m.18hm.cc/home/api/cate/tp/1-0-2-1-{}' # 全部
     url_over = 'http://m.18hm.cc/home/api/cate/tp/1-0-1-1-{}' # 已完结的
@@ -135,9 +135,9 @@ class Spider(object):
             self.get_comic_list(self.url_serialize, 'D:\manhua\连载韩漫\\')
         elif option == 3:
             # 漫画名称
-            comic_title = input('请输入你需要下载的漫画名称：')
+            comic_title = input('请输入你需要下载的漫画名称：') # 秘书的潜规则
             # 漫画ID
-            comic_id = input('请输入你需要下载的漫画ID：')
+            comic_id = input('请输入你需要下载的漫画ID：') # 13362
             # 漫画保存路径
             comic_root_path = 'D:\manhua\完结韩漫\\'
             self.get_comic_detail(comic_title, comic_id, comic_root_path)
