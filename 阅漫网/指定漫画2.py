@@ -92,14 +92,15 @@ class Spider(object):
                     print("图片下载成功:", image_path)
                 except:
                     print("图片下载失败:", image_path)
+                    print("图片下载失败地址:", img_url)
                     pass
             index += 1
 
     def get_comic_info(self):
         begin_line = 0
         end_line = 10
-        self.comic_root_path = "comic\\韩漫连载\\"
-        data = pd.read_csv('comic\\韩漫连载.csv', encoding='utf8', header=None)
+        self.comic_root_path = "comic\\韩漫完结\\"
+        data = pd.read_csv('comic\\韩漫完结.csv', encoding='utf8', header=None)
         # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
         csv_reader_lines = data.values.tolist()
         print(csv_reader_lines)
@@ -113,12 +114,10 @@ class Spider(object):
         # images_count:185
         # name:"Your sweet Angel"
         # resource_type:5
-        csv_title = ['漫画ID', '标题', '作者', '封面', '内容简介', '是否完结', '最新章节', '题材类型', '关键字', '评分']
+        csv_title = ['id', '名称', '封面', '类型']
         data_list = []
         for comic in comic_list:
-            comic_isover = '连载中' if comic['serialize'] == 1 else '已完结'
-            data_list.append([comic['id'], comic['name'], comic['auther'], comic['image'], comic['desc'], comic_isover,
-                              comic['last_chapter_title'], comic['ticai'], comic['tags'], comic['pingfen']])
+            data_list.append([comic['id'], comic['name'], comic['image'], comic['resource_type']])
         post_data = pd.DataFrame(columns=csv_title, data=data_list)
         post_data.to_csv(csv_path, index=False, header=False, mode='a+', encoding='UTF-8')
 
@@ -126,7 +125,7 @@ class Spider(object):
         post_data = {
             'page': 1,
             'size': 10,
-            'filter': '1,1,0'
+            'filter': '1,2,0'
         }
         for index in range(1, 100):
             post_data['page'] = index
@@ -146,6 +145,6 @@ class Spider(object):
 
 
 spider = Spider()
-# spider.comic_request(900)
+spider.comic_request(229)
 # spider.get_comic_info()
-spider.init_spider()
+# spider.init_spider()

@@ -16,14 +16,18 @@ def pic2pdf(home, dir):
     if os.path.exists(pdf_path):
         os.remove(pdf_path)
 
+    img_list = sorted(glob.glob(dir_path + '/*.jpg'))
+    print(img_list)
     doc = fitz.open()
-    for img in sorted(glob.glob(dir_path + '/*')):
-        print(img)
-        imgdoc = fitz.open(img)
-        pdfbytes = imgdoc.convertToPDF()
-        imgpdf = fitz.open('pdf', pdfbytes)
-        doc.insertPDF(imgpdf)
-    doc.save(pdf_path)
+
+    if len(img_list) > 0:
+        for img in img_list:
+            print(img)
+            imgdoc = fitz.open(img)
+            pdfbytes = imgdoc.convertToPDF()
+            imgpdf = fitz.open('pdf', pdfbytes)
+            doc.insertPDF(imgpdf)
+        doc.save(pdf_path)
     doc.close()
 
 def listDir(dir_path):
@@ -38,7 +42,5 @@ def listDir(dir_path):
 
 
 if __name__ == '__main__':
-    # pic2pdf()
-    # dir_path = 'comic/堕落教师'
     dir_path = input('请输入你需要将JPG图片合并成PDF的漫画目录：')
     listDir(dir_path)

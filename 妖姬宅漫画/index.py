@@ -47,13 +47,13 @@ class Spider(object):
             path.mkdir()
         self.get_comic_chapter(comic_id)
 
-    def save_comic_detail(self):
+    def save_comic_detail(self, list_url, save_path):
         post_list = []
         csv_title = ['漫画ID', '标题', '作者', '封面', '内容简介', '是否完结', '最新章节', '题材类型', '关键字', '评分']
         flag = True
         index = 1
         while flag:
-            url = self.url_serialize.format(str(index))
+            url = list_url.format(str(index))
             response = requests.get(url, headers=self.headers, timeout=50)
             response_data = json.loads(response.text)
             if response_data['code'] == 1:
@@ -75,7 +75,7 @@ class Spider(object):
                 flag = False
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
-        post_data.to_csv('连载漫画列表.csv', encoding='UTF-8')
+        post_data.to_csv(save_path, encoding='UTF-8')
 
     def get_comic_chapter(self, comic_id):
         url = 'http://m.18hm.cc/home/api/chapter_list/tp/{}-1-1-200'.format(comic_id)
@@ -142,7 +142,8 @@ class Spider(object):
             comic_root_path = 'D:\manhua\完结韩漫\\'
             self.get_comic_detail(comic_title, comic_id, comic_root_path)
         else:
-            self.save_comic_detail()
+            self.save_comic_detail(self.url_over, '完结漫画列表.csv')
+            self.save_comic_detail(self.url_serialize, '连载漫画列表.csv')
 
 spider = Spider()
 spider.init_spider()

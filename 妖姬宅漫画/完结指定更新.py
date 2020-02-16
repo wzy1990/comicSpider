@@ -7,7 +7,7 @@ import pandas as pd
 
 class Spider(object):
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3439.132 Safari/537.36'
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
     }
     url_all = 'http://m.18hm.cc/home/api/cate/tp/1-0-2-1-{}' # 全部
     url_over = 'http://m.18hm.cc/home/api/cate/tp/1-0-1-1-{}' # 已完结的
@@ -110,7 +110,7 @@ class Spider(object):
                 print('下载地址：', img_url)
                 # urllib.request.urlretrieve(img_url, image_path)
                 try:
-                    pic_data = requests.get(img_url, headers=self.headers, timeout=50)
+
                     with open(image_path, 'wb') as f:
                         f.write(pic_data.content)
                 except:
@@ -135,12 +135,20 @@ class Spider(object):
             self.get_comic_list(self.url_serialize, 'D:\manhua\连载韩漫\\')
         elif option == 3:
             # 漫画保存路径
-            comic_root_path = 'D:\manhua\连载韩漫\\'
-            self.get_comic_detail('隔壁母女', '', comic_root_path)
-            self.get_comic_detail('实习老师', '', comic_root_path)
-            self.get_comic_detail('', '', comic_root_path)
+            comic_root_path = 'D:\manhua\完结韩漫\\'
+            self.get_comic_detail('制服的诱惑', '13321', comic_root_path)
+            self.get_comic_detail('新生淫乱日记', '13243', comic_root_path)
+            self.get_comic_detail('曖昧女剧场', '13679', comic_root_path)
         else:
             self.save_comic_detail()
 
 spider = Spider()
 spider.init_spider()
+
+
+
+
+
+
+
+

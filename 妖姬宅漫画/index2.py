@@ -135,7 +135,7 @@ class Spider(object):
             self.get_comic_list(self.url_serialize, 'D:\manhua\连载韩漫\\')
         elif option == 3:
             # 漫画名称
-            comic_title = input('请输入你需要下载的漫画名称：') # 秘书的潜规则
+            comic_title = input('请输入你需要下载的漫画名称：')
             # 漫画ID
             comic_id = input('请输入你需要下载的漫画ID：') # 13362
             # 漫画保存路径

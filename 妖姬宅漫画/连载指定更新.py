@@ -136,9 +136,9 @@ class Spider(object):
         elif option == 3:
             # 漫画保存路径
             comic_root_path = 'D:\manhua\连载韩漫\\'
-            self.get_comic_detail('隔壁母女', '', comic_root_path)
-            self.get_comic_detail('实习老师', '', comic_root_path)
-            self.get_comic_detail('', '', comic_root_path)
+            self.get_comic_detail('实习老师', '13731', comic_root_path)
+            # self.get_comic_detail('', '', comic_root_path)
+            # self.get_comic_detail('', '', comic_root_path)
         else:
             self.save_comic_detail()
 
