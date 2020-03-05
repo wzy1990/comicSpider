@@ -137,7 +137,7 @@ class Spider(object):
                 print(response_data)
                 print(comic_list)
                 if len(comic_list) > 0:
-                    csv_path = 'comic\\韩漫完结.csv'
+                    csv_path = 'comic\\韩漫连载.csv'
                     self.save_comic_list(comic_list, csv_path)
                 else:
                     break
