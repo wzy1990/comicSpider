@@ -9,21 +9,22 @@
 import requests
 import urllib.request
 from lxml import etree
-import urllib.request
 import os
 from pathlib import Path
 
 
 class Spider(object):
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
+        'user-agent': 'Mozilla/5.2 (Windows NT 10.0; WOW64) AppleWebKit/538.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
     }
     comic_url = 'https://www.mkzhan.com/{}/'
     web_url = 'https://www.mkzhan.com'
+    # comic_root_path = 'D:\manhua\漫客栈网\【完结漫画】\\'
+    comic_root_path = 'G:\漫客栈网\【完结漫画】\\'
     comic_save_path = ''
     chapter_save_path = ''
 
-    def init_spider(self, comic_id, chapter_num):
+    def comic_request(self, comic_id, chapter_num):
         r = requests.get(self.comic_url.format(comic_id), headers=self.headers, timeout=50)
         r.encoding = r.apparent_encoding
         r.raise_for_status()
@@ -33,7 +34,7 @@ class Spider(object):
         ret = etree.HTML(html)
         title_list = ret.xpath('//p[@class="comic-title j-comic-title"]')
         comic_title = title_list[0].text
-        self.comic_save_path = "comic\\" + comic_title
+        self.comic_save_path = self.comic_root_path + comic_title
         path = Path(self.comic_save_path)
         if path.exists():
             pass
@@ -83,16 +84,49 @@ class Spider(object):
                 print("此图已经存在:", image_path)
             else:
                 print("图片正在下载:", image_path)
-                urllib.request.urlretrieve(img_url, image_path)
+                print('图片下载地址：', img_url)
+                # urllib.request.urlretrieve(img_url, image_path)
+                try:
+                    pic_data = requests.get(img_url, headers=self.headers, timeout=50)
+                    with open(image_path, 'wb') as f:
+                        f.write(pic_data.content)
+                except:
+                    print('图片下载失败：：：', img_url)
             index += 1
 
+    # 批量下载漫画
+    def download_comic_list(self, comic_list):
+        for comic in comic_list:
+            self.comic_request(comic, 0)
 
-# 漫画id
-comic_id = input('请输入你需要下载的漫画ID：')
-# 第几章节开始
-chapter_num = int(input('请输入开始章节：'))
+    def init(self):
+        print("    | ------------------------- |")
+        print("    |    欢迎使用漫客栈下载工具！   |")
+        print("    | ========================= |")
+        print("    |     可以下载单个漫画         |")
+        print("    |     也可下载多个漫画         |")
+        print("    |    多个漫画请用逗号隔开       |")
+        # # 选择功能
+        comic_ids = input('请选择漫画ID：')
+        option = int(input('漫画保存目录：1.默认目录， 2.自定义目录'))
+        comic_list = comic_ids.split(',') # 211471,209306,211189
+        if option == 2:
+            save_path = input('请输入漫画保存路径：')
+            self.comic_root_path = save_path
+        self.download_comic_list(comic_list)
+
 spider = Spider()
-spider.init_spider(comic_id, chapter_num)
+spider.init()
+# # 漫画id
+# comic_id = input('请输入你需要下载的漫画ID：')
+# # 第几章节开始
+# chapter_num = int(input('请输入开始章节：'))
+# spider.comic_request(comic_id, chapter_num)
 
 # '213887' 琅琊榜
 # '208670' 风起苍岚
+# '207622' 妖神记
+# '212800' 绝品小神医
+# 211471 绝世武神
+# 209306 女子学院的男生
+# 211189 姻缘宝典

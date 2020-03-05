@@ -48,10 +48,14 @@ class WpPost(object):
         return soup
 
     def getDatas(self):
-        with open(self.homepath + '\\' + self.leimu + '\\漫画信息表.csv', 'r', encoding='gbk') as csv_file:
-            csv_reader_lines = csv.reader(csv_file)
-            for index in range(self.begin_line, self.end_line, self.step):
-                self.postBlog(csv_reader_lines[index])
+        # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
+        data = pd.read_csv(self.homepath + '\\' + self.leimu + '.csv', encoding='gbk', header=None)
+        csv_reader_lines = data.values.tolist()
+        for index in range(self.begin_line, self.end_line, self.step):
+            comic = csv_reader_lines[index]
+            if comic[10] == '否':
+                print(comic)
+                self.postBlog(comic)
 
     def postBlog(self, new_blog):
         print('正在发布：', new_blog[1])
@@ -75,54 +79,55 @@ class WpPost(object):
             comic_cover = '<img src="' + comic_img + '" alt="" class="aligncenter size-full wp-image-154" />'
             new_blog[3] = comic_img
             # 漫画内容简介
+            print(comic_detail.find('p', {'class': 'content'}))
+            content_html = comic_detail.find('p', {'class': 'content'})
             comic_content = comic_detail.find('p', {'class': 'content'}).text
-            comic_content = comic_content.replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
+            if content_html != None and comic_content:
+                comic_content = comic_content.replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
+            else:
+                comic_content = new_blog[4].replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
+            print('1.comic_content：' + comic_content)
             post.content = '<blockquote style="text-indent: 30px;">' + comic_content + '</blockquote>' + comic_cover
             # 连载状态，及分类
             comic_info_list = comic_detail.find_all('span', {'class': 'block'})
-            if comic_info_list[1].find('span') != None:
+            # print(comic_info_list)
+            if len(comic_info_list) > 1:
                 comic_type = comic_info_list[1].find('span').text
+                print(comic_type)
             else:
                 comic_type = '其他'
             post.terms_names = {
                 'post_tag': [comic_type],  # 文章所属标签，没有则自动创建
-                'category': [self.leimu]  # 文章所属分类，没有则自动创建
+                'category': ['港台漫画']  # 文章所属分类，没有则自动创建
             }
         except:
+            print('2.comic_content：=====' + new_blog[4])
             new_blog[4] = new_blog[4].replace('\u3000', '').replace('\xa0', '').replace('[+展开]', '').replace('[-折叠]', '')
             post.content = '<blockquote style="text-indent: 30px;">' + new_blog[4] + '</blockquote>' + comic_cover
             post.terms_names = {
                 'post_tag': [comic_type],  # 文章所属标签，没有则自动创建
-                'category': [self.leimu]  # 文章所属分类，没有则自动创建
+                'category': ['港台漫画']  # 文章所属分类，没有则自动创建
             }
 
         post.custom_fields = []  # 自定义字段列表
         # 资源价格
-        post.custom_fields.append({'key': 'cao_price', 'value': 1})
+        post.custom_fields.append({'key': 'cao_price', 'value': 2})
         # VIP折扣
         post.custom_fields.append({'key': 'cao_vip_rate', 'value': 0})
         # 仅限永久VIP免费
         post.custom_fields.append({'key': 'cao_is_boosvip', 'value': 0})
         # 启用付费下载资源
         post.custom_fields.append({'key': 'cao_status', 'value': 1})
-        post.custom_fields.append({  # 资源类型
-            'key': 'wppay_type',
-            'value': 4
-        })
-        post.custom_fields.append({  # 资源下载地址
-            'key': 'cao_downurl',
-            'value': [{
-                'name': '立即下载',
-                'url': '#'
-            }]
-        })
+        # 资源类型
+        post.custom_fields.append({'key': 'wppay_type', 'value': 4})
+        # 资源下载地址
+        post.custom_fields.append({'key': 'cao_downurl', 'value': new_blog[8]})
+        # 资源下载密码
+        post.custom_fields.append({'key': 'cao_pwd', 'value': new_blog[9]})
         # 资源下载次数
         post.custom_fields.append({ 'key': 'cao_paynum', 'value': random.randint(1, 50) })
-        # 资源下载密码
-        post.custom_fields.append({ 'key': 'cao_pwd', 'value': 'www.51mhb.com' })
-        # 自定义按钮
-        post.custom_fields.append({ 'key': 'cao_diy_btn', 'value': '查看更多资源|http://www.51mhb.com/' })
-        post.custom_fields.append({  # 资源其他信息
+        # 资源其他信息
+        post.custom_fields.append({
             'key': 'cao_info',
             'value': [{
                 'title': '作   者',
@@ -187,8 +192,8 @@ class WpPost(object):
 startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
-wpPost.updatePost()
-# wpPost.init_spider('港台漫画', 450, 96, -1) # 1
+# wpPost.updatePost()
+wpPost.init_spider('港台漫画_完结【动漫屋】', 231, 0, -1) # 1
 # wpPost.init_spider('欧美漫画', 1770, 1700, -1) # 1
 # wpPost.init_spider('日韩漫画', 5200, 5100, -1) # 1
 # wpPost.init_spider('大陆漫画', 1434, 1400, -1) # 1

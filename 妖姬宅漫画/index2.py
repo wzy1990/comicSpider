@@ -82,13 +82,14 @@ class Spider(object):
         response = requests.get(url, headers=self.headers, timeout=50)
         response_data = json.loads(response.text)
         result = response_data['result']
-        print(result)
+        # print(result)
         list = result['list']
-        print(list)
+        # print(list)
         # print(len(list))
         for item in list:
-            print('当前章节：', item['title'])
-            self.chapter_save_path = self.comic_save_path + '\\' + item['title'].replace(':', '：').replace('?', '？')
+            title = item['title'].replace(':', '：').replace('?', '？').replace('...', '').strip()
+            # print('当前章节：', title)
+            self.chapter_save_path = self.comic_save_path + '\\' + title
             path = Path(self.chapter_save_path)
             if path.exists():
                 pass
@@ -101,20 +102,26 @@ class Spider(object):
         index = 1
         image_list = image_list.split(',')
         for img_url in image_list:
-            image_path = self.chapter_save_path + '\\' + str(index) + '.jpg'
+            if index < 10:
+                pic_name = '00{}.jpg'.format(str(index))
+            elif index < 100:
+                pic_name = '0{}.jpg'.format(str(index))
+            else:
+                pic_name = '{}.jpg'.format(str(index))
+            image_path = self.chapter_save_path + '\\' + pic_name
             if os.path.isfile(image_path):
                 print("此图已经存在:", image_path)
             else:
                 print("图片正在下载:", image_path)
                 img_url = 'http://17z.online/' + img_url.replace('./', '')
-                print('下载地址：', img_url)
+                print('图片下载地址：', img_url)
                 # urllib.request.urlretrieve(img_url, image_path)
                 try:
                     pic_data = requests.get(img_url, headers=self.headers, timeout=50)
                     with open(image_path, 'wb') as f:
                         f.write(pic_data.content)
                 except:
-                    print('下载失败：：：', img_url)
+                    print('图片下载失败：：：', img_url)
             index += 1
 
     def init_spider(self):

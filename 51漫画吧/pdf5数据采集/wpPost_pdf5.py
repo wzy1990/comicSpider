@@ -38,13 +38,6 @@ class WpPost(object):
         self.category = category
         self.getDatas()
 
-    # 获取网页信息
-    def get_html(self, url):
-        html = requests.get(url, headers=self.header)
-        html.encoding = 'utf8'
-        soup = bs(html.text, 'lxml')
-        return soup
-
     def getDatas(self):
         # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
         data = pd.read_csv(self.comic_path, encoding='gbk', header=None)
