@@ -113,7 +113,7 @@ class Spider(object):
                 print("此图已经存在:", image_path)
             else:
                 print("图片正在下载:", image_path)
-                img_url = 'http://17z.online/' + img_url.replace('./', '')
+                img_url = 'https://cdn.17z.online/' + img_url.replace('./', '')
                 print('图片下载地址：', img_url)
                 # urllib.request.urlretrieve(img_url, image_path)
                 try:

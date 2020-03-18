@@ -9,7 +9,7 @@ def del_selected_page(dir_path, page_index):
         print(pdf)
         doc = fitz.open(pdf)
         doc.deletePage(page_index)
-        save_name = pdf.replace('-', '').replace('_压缩', '')
+        save_name = pdf.replace('-', '~').replace('_压缩', '')
         doc.save(save_name)
         doc.close()
 

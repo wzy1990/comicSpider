@@ -36,48 +36,50 @@ class Spider(object):
 
         for index in range(1, page_num):
             print(index)
-            try:
-                url = list_url.format(str(index))
-                print(url)
-                page = self.get_html(url)
-                list_container = page.find('div', {'id': 'container'})
-                comic_list = list_container.find_all('div', {'class': 'blog-grid element column-1'})
-                # print(comic_list)blog-grid element column-1
-                for comic in comic_list:
-                    print('1')
-                    # 漫画标题
-                    comic_title = comic.find('h2', {'class': 'blog-title'}).find('a').text
-                    print('2')
-                    # 漫画封面
-                    img_tag = comic.find('img')
-                    if img_tag:
-                        comic_cover = img_tag['src']
-                        # 漫画作者
-                        comic_authon_title = comic_title.split('】')[1]
-                        comic_author = comic_authon_title.split(' – ')[0]
-                        comic_isover = '连载中' if '连载中' in comic_title else '完结'
-                    else:
-                        comic_cover = ''
-                        comic_author = ''
-                        comic_isover = ''
-                    print('3')
-                    # 漫画简介
-                    comic_content = ''
-                    # 缓存这一条文章的全部信息，以备保存到CSV
-                    # print(comic_title)
-                    # print(comic_author)
-                    # print('4')
-                    print(comic_isover)
-                    post_list.append([comic_title, comic_author, comic_cover, comic_content, comic_isover, ''])
-            except:
-                print('有问题')
-                pass
+            url = list_url.format(str(index))
+            print(url)
+            page = self.get_html(url)
+            # print(page)
+            list_container = page.find('div', {'id': 'infinite-post-wrap'})
+            # print(list_container)
+            comic_list = list_container.find_all('article')
+            # print(comic_list)
+            for comic in comic_list:
+                print('1')
+                # 漫画标题
+                comic_authon_title = comic.find('h2', {'class': 'entry-title'}).find('a').text.split('–')
+                if len(comic_authon_title) > 1:
+                    comic_title = comic_authon_title[1]
+                    comic_isover = '连载中' if '连载中' in comic_title else '完结'
+                    # 漫画作者
+                    comic_author = comic_authon_title[0]
+                else:
+                    break
+
+                print('2')
+                # 漫画封面
+                img_tag = comic.find('img')
+                if img_tag:
+                    comic_cover = img_tag['src']
+                else:
+                    comic_cover = ''
+                print('3')
+                # 漫画简介
+                comic_content = ''
+                # 缓存这一条文章的全部信息，以备保存到CSV
+                # print(comic_title)
+                # print(comic_author)
+                # print('4')
+                print(comic_isover)
+                post_list.append([comic_title, comic_author, comic_cover, comic_content, comic_isover, ''])
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
-        post_data.to_csv(save_path, encoding='UTF-8')
+        print(post_data)
+        post_data.to_csv(save_path, encoding='gbk')
 
     def init(self):
-        self.save_comic_detail(self.comic_url, 26, '漫画列表.csv')
+        self.save_comic_detail(self.comic_url, 2, '漫画列表.csv')
+
 
 spider = Spider()
 spider.init()

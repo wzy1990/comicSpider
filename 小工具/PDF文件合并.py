@@ -4,6 +4,7 @@ import os
 
 
 class PDFMerge(object):
+    need_encrypt = 2
     perm = int(fitz.PDF_PERM_ACCESSIBILITY) # always use this
     owner_pass = "wzy1990"  # owner password
     user_pass = "51mhb.com"  # user password
@@ -63,20 +64,26 @@ class PDFMerge(object):
                 self.list_dir(dir_path)
 
     def init(self):
-        print("    | --------------------------------- |")
-        print("    |     欢迎使用PDF合并小工具！         |")
-        print("    | ================================= |")
-        print("    |    1. 指定某个漫画PDF目录              |")
-        print("    |    2. 指定漫画PDF列表目录              |")
-        # # 选择功能
-        option = int(input('请选择功能选项：'))
-        dir_path = input('请输入需要合并的漫画PDF目录：')
-        need_encrypt = int(input('是否加密合并后的PDF文件？ 1.加密  2.不加密   '))
-        self.need_encrypt = need_encrypt
-        if option == 1:
-            self.list_dir(dir_path)
-        elif option == 2:
-            self.list_root_dir(dir_path)
+        flag = True
+        while flag:
+            print("    | ---------------------------------|")
+            print("    |     欢迎使用PDF合并小工具！         |")
+            print("    | =================================|")
+            print("    |    1. 指定某个漫画PDF目录          |")
+            print("    |    2. 指定漫画PDF列表目录          |")
+            # # 选择功能
+            option = int(input('请选择功能选项：'))
+            dir_path = input('请输入需要合并的漫画PDF目录：')
+            self.need_encrypt = int(input('是否加密合并后的PDF文件？ 1.加密  2.不加密 \n'))
+
+            if option == 1:
+                self.list_dir(dir_path)
+            elif option == 2:
+                self.list_root_dir(dir_path)
+
+            is_continue = input('是否继续合并其他PDF文件？ 1.继续  2.退出 \n')
+            if is_continue != '1':
+                flag = False
 
 
 pdfMerge = PDFMerge()

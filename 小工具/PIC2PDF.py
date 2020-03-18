@@ -7,14 +7,18 @@
 import glob
 import fitz
 import os
+import datetime
 from pathlib import Path
 
-class Pdftool(object):
+
+class PDFTool(object):
+    need_footer = 2
+
     def pic2pdf(self, home, dir):
         # print(home, dir)
         dir_path = home + '/' + dir
         pdf_dir = home + '【PDF版】/'
-        pdf_path = pdf_dir + dir.split('-')[0] + '.pdf'
+        pdf_path = pdf_dir + dir + '.pdf' # dir.split('-')[0]
 
         path = Path(pdf_dir)
         if path.exists():
@@ -29,7 +33,32 @@ class Pdftool(object):
         print(img_list)
 
         if len(img_list) > 0:
+            if self.need_footer == 1:
+                img_list.append('D:\\51漫画吧LOGO.png')  # 网站宣传页地址
             self.saveToPDF(img_list, pdf_path)
+
+    def pdf2pic(self, pdfPath, imagePath):
+        start_time = datetime.datetime.now()
+
+        pdf_doc = fitz.open(pdfPath)
+        for index in range(pdf_doc.pageCount):
+            page = pdf_doc[index]
+            rotate = int(0)
+
+            zoom_x = 1
+            zoom_y = 1
+
+            mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)
+            pix = page.getPixmap(matrix=mat, alpha=False)
+
+            if not os.path.exists(imagePath):
+                os.makedirs(imagePath)
+
+            pix.writePNG(imagePath + '/' + 'images_%s.png' % index) # 将图片写入指定的文件夹内
+
+        end_time = datetime.datetime.now()  # 结束时间
+        print('pdf2img时间 = ', (end_time - start_time).seconds)
+
 
     def saveToPDF(self, img_list, pdf_path):
         doc = fitz.open()
@@ -38,8 +67,8 @@ class Pdftool(object):
             try:
                 imgdoc = fitz.open(img)  # open pic as document
                 rect = imgdoc[0].rect  # pic dimension
-                rect_width = 900
-                rect_height = rect.height / rect.width * 900
+                rect_width = 800
+                rect_height = rect.height / rect.width * rect_width
                 pdfbytes = imgdoc.convertToPDF()  # make a PDF stream
                 imgdoc.close()  # no longer needed
                 imgpdf = fitz.open('pdf', pdfbytes)  # open stream as PDF
@@ -61,7 +90,7 @@ class Pdftool(object):
                         self.pic2pdf(home, dir)
                 if len(files) > 0:
                     img_list = []
-                    for img in files:
+                    for img in sorted(files):
                         img_list.append(os.path.join(home, img))
                     self.saveToPDF(img_list, home + '.pdf')
                 # print("#######目录{}结束#######".format(home))
@@ -86,13 +115,15 @@ class Pdftool(object):
         # # 选择功能
         option = int(input('请选择功能选项：'))
         dir_path = input('请输入漫画目录：')
+        self.need_footer = int(input('是否页脚插入网站宣传页：1.加上  2.不加    '))
         if option == 1:
             self.list_dir(dir_path)
         elif option == 2:
             self.list_root_dir(dir_path)
 
 
-pdfTool = Pdftool()
+pdfTool = PDFTool()
+# pdfTool.pdf2pic('G:\mangacon_v2.6\Download\\1【热门连载】\龙珠超次元乱战【PDF版】\\01-02话试看\第01话 非常奇怪的比武大会！【51mhb.com】.pdf', 'G:\mangacon_v2.6\Download\\1【热门连载】\龙珠超次元乱战【PDF版】\\01-02话试看')
 pdfTool.init()
 
 # imgdoc = fitz.open(img)  # open pic as document

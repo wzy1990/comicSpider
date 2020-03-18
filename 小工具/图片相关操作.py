@@ -23,11 +23,12 @@ def change_img_name(dest_path):
 def del_bad_img(dest_path):
     for root, dirs, files in os.walk(dest_path):
         if len(files) > 1:
-            print(files)
+            # print(files)
             for file in files:
                 file_name = os.path.join(root, file)
                 check = imghdr.what(file_name)
                 if check == None:
+                    print(root, file_name)
                     os.remove(file_name)
 
 
