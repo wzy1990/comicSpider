@@ -30,11 +30,10 @@ class PDFTool(object):
 
         print(dir_path)
         img_list = sorted(glob.glob(dir_path + '/*.jpg'))
-        print(img_list)
 
         if len(img_list) > 0:
             if self.need_footer == 1:
-                img_list.append('D:\\51漫画吧LOGO.png')  # 网站宣传页地址
+                img_list.append('51漫画吧LOGO.png')  # 网站宣传页地址
             self.saveToPDF(img_list, pdf_path)
 
     def pdf2pic(self, pdfPath, imagePath):
@@ -58,7 +57,6 @@ class PDFTool(object):
 
         end_time = datetime.datetime.now()  # 结束时间
         print('pdf2img时间 = ', (end_time - start_time).seconds)
-
 
     def saveToPDF(self, img_list, pdf_path):
         doc = fitz.open()
@@ -90,9 +88,11 @@ class PDFTool(object):
                         self.pic2pdf(home, dir)
                 if len(files) > 0:
                     img_list = []
-                    for img in sorted(files):
-                        img_list.append(os.path.join(home, img))
-                    self.saveToPDF(img_list, home + '.pdf')
+                    for file in sorted(files):
+                        if '.jpg' in file:
+                            img_list.append(os.path.join(home, file))
+                    if len(img_list) > 0:
+                        self.saveToPDF(img_list, home + '.pdf')
                 # print("#######目录{}结束#######".format(home))
             count_index += 1
 
@@ -107,19 +107,25 @@ class PDFTool(object):
                 self.list_dir(dir_path)
 
     def init(self):
-        print("    | --------------------------------- |")
-        print("    |     欢迎使用JPG转PDF小工具！         |")
-        print("    | ================================= |")
-        print("    |    1. 指定某个漫画目录              |")
-        print("    |    2. 指定漫画列表目录              |")
-        # # 选择功能
-        option = int(input('请选择功能选项：'))
-        dir_path = input('请输入漫画目录：')
-        self.need_footer = int(input('是否页脚插入网站宣传页：1.加上  2.不加    '))
-        if option == 1:
-            self.list_dir(dir_path)
-        elif option == 2:
-            self.list_root_dir(dir_path)
+        flag = True
+        while flag:
+            print("    | --------------------------------- |")
+            print("    |     欢迎使用JPG转PDF小工具！         |")
+            print("    | ================================= |")
+            print("    |    1. 指定某个漫画目录              |")
+            print("    |    2. 指定漫画列表目录              |")
+            # # 选择功能
+            option = int(input('请选择功能选项：'))
+            dir_path = input('请输入漫画目录：')
+            self.need_footer = int(input('是否页脚插入网站宣传页：1.加上  2.不加    '))
+            if option == 1:
+                self.list_dir(dir_path)
+            elif option == 2:
+                self.list_root_dir(dir_path)
+
+            is_continue = input('是否继续转化其他图片文件？ 1.继续  2.退出 \n')
+            if is_continue != '1':
+                flag = False
 
 
 pdfTool = PDFTool()

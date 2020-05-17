@@ -102,22 +102,28 @@ class Spider(object):
             self.comic_request(comic, 0)
 
     def init(self):
-        print("    | ------------------------- |")
-        print("    | ------------------------- |")
-        print("    |    欢迎使用漫客栈下载工具！   |")
-        print("    | ========================= |")
-        print("    | ========================= |")
-        # # 选择功能
-        comic_id = input('请输入你需要下载的漫画ID：')
-        # 第几章节开始
-        chapter_num = int(input('请输入开始章节：'))
-        option = int(input('漫画保存目录：1.默认目录， 2.自定义目录   '))
+        flag = True
+        while flag:
+            print("    | ------------------------- |")
+            print("    | ------------------------- |")
+            print("    |    欢迎使用漫客栈下载工具！   |")
+            print("    | ========================= |")
+            print("    | ========================= |")
+            # # 选择功能
+            comic_id = input('请输入你需要下载的漫画ID：')
+            # 第几章节开始
+            chapter_num = int(input('请输入开始章节：'))
+            option = int(input('漫画保存目录：1.默认目录， 2.自定义目录   '))
+            if option == 2:
+                save_path = input('请输入漫画保存路径：')
+                self.comic_root_path = save_path
 
-        if option == 2:
-            save_path = input('请输入漫画保存路径：')
-            self.comic_root_path = save_path
+            spider.comic_request(comic_id, chapter_num)
 
-        spider.comic_request(comic_id, chapter_num)
+            is_continue = input('是否继续下载漫画？ 1.继续  2.退出 \n')
+            if is_continue != '1':
+                flag = False
+
 
 spider = Spider()
 spider.init()

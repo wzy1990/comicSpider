@@ -7,11 +7,13 @@ import pandas as pd
 
 class Spider(object):
     headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3439.132 Safari/537.36'
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
     }
     url_all = 'http://m.18hm.cc/home/api/cate/tp/1-0-2-1-{}' # 全部
     url_over = 'http://m.18hm.cc/home/api/cate/tp/1-0-1-1-{}' # 已完结的
     url_serialize = 'http://m.18hm.cc/home/api/cate/tp/1-0-0-1-{}' # 连载中
+    url_chapter_list = 'http://m.18hm.cc/home/api/chapter_list/tp/{}-1-1-200'
+    url_image_download = 'https://img.toptoon.club/'
     comic_save_path = ''
     chapter_save_path = ''
 
@@ -21,13 +23,16 @@ class Spider(object):
         while flag:
             url = list_url.format(str(index))
             response = requests.get(url, headers=self.headers, timeout=50)
-            response_data = json.loads(response.text)
-            print(response_data)
+            html = response.text
+            # html = html.encode('gbk', "ignore").decode('gbk')  # 先用gbk编码,忽略掉非法字符,然后再译码
+            html = html.encode('utf-8').decode('utf-8')
+            response_data = json.loads(html)
+            # print(json.loads(html))
             if response_data['code'] == 1:
                 result = response_data['result']
                 lastPage = result['lastPage']
                 list = result['list']
-                print(list)
+                # print(list)
                 for comic in list:
                     self.get_comic_detail(comic['title'], comic['id'], comic_root_path)
                 if lastPage:
@@ -47,13 +52,13 @@ class Spider(object):
             path.mkdir()
         self.get_comic_chapter(comic_id)
 
-    def save_comic_detail(self):
+    def save_comic_detail(self, list_url, save_path):
         post_list = []
         csv_title = ['漫画ID', '标题', '作者', '封面', '内容简介', '是否完结', '最新章节', '题材类型', '关键字', '评分']
         flag = True
         index = 1
         while flag:
-            url = self.url_serialize.format(str(index))
+            url = list_url.format(str(index))
             response = requests.get(url, headers=self.headers, timeout=50)
             response_data = json.loads(response.text)
             if response_data['code'] == 1:
@@ -75,20 +80,21 @@ class Spider(object):
                 flag = False
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
-        post_data.to_csv('连载漫画列表.csv', encoding='UTF-8')
+        post_data.to_csv(save_path, encoding='UTF-8')
 
     def get_comic_chapter(self, comic_id):
-        url = 'http://m.18hm.cc/home/api/chapter_list/tp/{}-1-1-200'.format(comic_id)
+        url = self.url_chapter_list.format(comic_id)
         response = requests.get(url, headers=self.headers, timeout=50)
+        response.encoding = response.apparent_encoding
         response_data = json.loads(response.text)
         result = response_data['result']
-        # print(result)
+        print(result)
         list = result['list']
-        # print(list)
+        print(list)
         # print(len(list))
         for item in list:
             title = item['title'].replace(':', '：').replace('?', '？').replace('...', '').strip()
-            # print('当前章节：', title)
+            print('当前章节：', item['title'])
             self.chapter_save_path = self.comic_save_path + '\\' + title
             path = Path(self.chapter_save_path)
             if path.exists():
@@ -113,7 +119,7 @@ class Spider(object):
                 print("此图已经存在:", image_path)
             else:
                 print("图片正在下载:", image_path)
-                img_url = 'http://17z.online/' + img_url.replace('./', '')
+                img_url = self.url_image_download + img_url.replace('./', '')
                 print('图片下载地址：', img_url)
                 # urllib.request.urlretrieve(img_url, image_path)
                 try:
@@ -141,15 +147,19 @@ class Spider(object):
         elif option == 2:
             self.get_comic_list(self.url_serialize, 'D:\manhua\连载韩漫\\')
         elif option == 3:
-            # 漫画名称
-            comic_title = input('请输入你需要下载的漫画名称：')
-            # 漫画ID
-            comic_id = input('请输入你需要下载的漫画ID：') # 13362
             # 漫画保存路径
             comic_root_path = 'D:\manhua\完结韩漫\\'
-            self.get_comic_detail(comic_title, comic_id, comic_root_path)
+            self.get_comic_detail('曖昧女剧场', '13679', comic_root_path)
         else:
             self.save_comic_detail()
 
 spider = Spider()
 spider.init_spider()
+
+
+
+
+
+
+
+

@@ -115,8 +115,10 @@ class WpPost(object):
 startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
-# 日韩漫画
-wpPost.init_spider(1, 17, 1, 'CCPDF_list.xlsx')
+
+start_num = int(input('请输入开始行数：'))
+end_num = int(input('请输入结束行数：'))
+wpPost.init_spider(start_num, end_num, 1, 'D:\python_spider\\51漫画吧\完结漫画列表.xlsx')
 # wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)
