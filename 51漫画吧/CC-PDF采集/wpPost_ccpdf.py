@@ -28,7 +28,7 @@ class WpPost(object):
         'referer': 'http://47.112.130.142',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
     }
-    wp = Client('http://47.112.130.142/xmlrpc.php', 'admin_wzy', 'admin_wzy19900420')
+    wp = Client('http://51mhb.com/xmlrpc.php', 'admin_wzy', 'wzy19900420wzy')
 
     # 初始化
     def init_spider(self, begin_line, end_line, step, comic_path):
