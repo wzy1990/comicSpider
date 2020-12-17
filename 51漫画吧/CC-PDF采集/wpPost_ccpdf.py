@@ -25,7 +25,7 @@ class WpPost(object):
     comic_path = 'comic_list.csv'
     header = {
         'cookie': 'Hm_lvt_dbc355aef238b6c32b43eacbbf161c3c=1536981553; Hm_lpvt_dbc355aef238b6c32b43eacbbf161c3c=1536986863',
-        'referer': 'http://47.112.130.142',
+        'referer': 'http://51mhb.com',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
     }
     wp = Client('http://51mhb.com/xmlrpc.php', 'admin_wzy', 'wzy19900420wzy')
