@@ -22,7 +22,7 @@ class WpPost(object):
     begin_line = 2 # 第几行开始
     end_line = 100 # 结束行
     step = 1
-    comic_path = 'comic_list.csv'
+    comic_path = 'ACG次元网列表2.csv'
     header = {
         'cookie': 'Hm_lvt_dbc355aef238b6c32b43eacbbf161c3c=1536981553; Hm_lpvt_dbc355aef238b6c32b43eacbbf161c3c=1536986863',
         'referer': 'http://47.112.130.142',
@@ -31,40 +31,35 @@ class WpPost(object):
     wp = Client('http://47.112.130.142/xmlrpc.php', 'admin_wzy', 'admin_wzy19900420')
 
     # 初始化
-    def init_spider(self, begin_line, end_line, step, comic_path):
+    def init_spider(self, begin_line, end_line, step):
         self.begin_line = begin_line  # 第几行开始
         self.end_line = end_line  # 结束行
         self.step = step  # 结束行
-        self.comic_path = comic_path
         self.getDatas()
 
     def getDatas(self):
-        workbook = xlrd.open_workbook(self.comic_path)
-        sheet = workbook.sheet_by_index(0)
+        data = pd.read_csv(self.comic_path, encoding='gbk')
+        csv_reader_lines = data.values.tolist()
         for row in range(self.begin_line, self.end_line, self.step):
-            row_data = sheet.row_values(row)
+            row_data = csv_reader_lines[row]
             # print(row_data)
             self.postBlog(row_data)
 
     def postBlog(self, new_blog):
         print('正在发布：', new_blog[1])
         post = WordPressPost()
-        kuohao = '【{}】'
-        post.title = new_blog[1] + kuohao.format(new_blog[2]) + kuohao.format(new_blog[8])
+        post.title = new_blog[1]
         post.post_status = 'publish'  # 文章状态，不写默认是草稿，private表示私密的，draft表示草稿，publish表示发布
-        comic_cover = '<img src="' + new_blog[6] + '" alt="" class="aligncenter size-full wp-image-154" />'
-        post.content = comic_cover + '<h5>漫画简介：</h5><blockquote style="text-indent: 30px;">' + new_blog[7] + '</blockquote>'
+        post.content = new_blog[2]
 
-        serial_status = '精彩连载,' if '连载' in new_blog[5] else '经典完结,'
-        categorys = serial_status + new_blog[3]
         post.terms_names = {
-            'post_tag': new_blog[4].split(','),  # 文章所属标签，没有则自动创建
-            'category': categorys.split(',') + new_blog[5].split('+') # 文章所属分类，没有则自动创建
+            'post_tag': new_blog[3].split(','),  # 文章所属标签，没有则自动创建
+            'category': new_blog[4].split('+') # 文章所属分类，没有则自动创建
         }
 
         post.custom_fields = []  # 自定义字段列表
         # 资源价格
-        price = int(new_blog[11]) * 10 if new_blog[11] else 2 * 10
+        price = 2
         post.custom_fields.append({'key': 'cao_price', 'value': price})
         # VIP折扣
         post.custom_fields.append({'key': 'cao_vip_rate', 'value': 0})
@@ -74,24 +69,11 @@ class WpPost(object):
         post.custom_fields.append({'key': 'cao_status', 'value': 1})
         post.custom_fields.append({'key': 'wppay_type', 'value': 4})
         # 资源下载地址
-        post.custom_fields.append({'key': 'cao_downurl', 'value': new_blog[9]})
+        post.custom_fields.append({'key': 'cao_downurl', 'value': new_blog[5]})
         # 资源下载密码
-        post.custom_fields.append({'key': 'cao_pwd', 'value': new_blog[10]})
+        post.custom_fields.append({'key': 'cao_pwd', 'value': new_blog[6]})
         # 资源下载次数
         post.custom_fields.append({'key': 'cao_paynum', 'value': random.randint(1, 50)})
-        post.custom_fields.append({  # 资源其他信息
-            'key': 'cao_info',
-            'value': [{
-                'title': '作   者',
-                'desc': new_blog[2]
-            }, {
-                'title': '题材类型',
-                'desc': new_blog[4]
-            }, {
-                'title': '是否完结',
-                'desc': new_blog[8]
-            }]
-        })
         try:
             self.wp.call(posts.NewPost(post))
             print('发布成功：', new_blog[1])
@@ -125,7 +107,7 @@ wpPost = WpPost()
 start_num = int(input('请输入开始行数：'))
 end_num = int(input('请输入结束行数：'))
 
-wpPost.init_spider(start_num, end_num, 1, 'D:\python_spider\\51漫画吧\\完结漫画列表.xlsx')
+wpPost.init_spider(start_num, end_num, 1)
 # wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)

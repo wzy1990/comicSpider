@@ -149,3 +149,6 @@ spider = Spider()
 # spider.comic_request(900)
 # spider.get_comic_info()
 spider.init_spider()
+
+
+

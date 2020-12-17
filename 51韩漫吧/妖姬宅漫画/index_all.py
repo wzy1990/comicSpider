@@ -66,7 +66,7 @@ class Spider(object):
                 lastPage = result['lastPage']
                 list = result['list']
                 for comic in list:
-                    print(comic)
+                    # print(comic)
                     comic_isover = '已完结' if comic['mhstatus'] == '1' else '连载中'
                     post_list.append([comic['id'], comic['title'], comic['auther'], comic['image'], comic['desc'], comic_isover,
                                       comic['last_chapter_title'], comic['ticai'], comic['keyword'], comic['pingfen']])
@@ -136,8 +136,8 @@ class Spider(object):
         print("    |       目标站点：m.18hm.cc            |")
         print("    | 作者:zhiyong_wang(946455381@qq.com) |")
         print("    | ================================== |")
-        print("    |    1. 下载所有已完结漫画              |")
-        print("    |    2. 下载更新连载中漫画              |")
+        print("    |    1. 下载完结漫画(D:\manhua\完结韩漫) |")
+        print("    |    2. 下载连载漫画(D:\manhua\连载韩漫) |")
         print("    |    3. 下载指定漫画                   |")
         print("    |    4. 保存漫画列表信息到本地           |")
         # 选择功能
