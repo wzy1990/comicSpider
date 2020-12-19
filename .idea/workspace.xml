@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2d19071a-68bb-45c2-bdea-53123e95b411" name="Default Changelist" comment="更新。。。。">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/comicSpider.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/comicSpider.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/小工具/将目录的所有文件名称保存到csv.py" beforeDir="false" afterPath="$PROJECT_DIR$/小工具/将目录的所有文件名称保存到csv.py" afterDir="false" />
+    <list default="true" id="2d19071a-68bb-45c2-bdea-53123e95b411" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py" beforeDir="false" afterPath="$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/venv/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,10 +15,15 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost_ccpdf.py">
+        <entry file="file://$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-162">
-              <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            <state relative-caret-position="1045">
+              <caret line="145" column="23" lean-forward="true" selection-start-line="145" selection-start-column="23" selection-end-line="145" selection-end-column="23" />
+              <folding>
+                <element signature="e#113#123#0" expanded="true" />
+                <element signature="e#1633#3810#0" />
+                <element signature="e#3870#4503#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -60,12 +63,12 @@
       <find>comic_year</find>
       <find>comic_isover</find>
       <find>main_download</find>
-      <find>init_spider</find>
       <find>site_url</find>
       <find>袁藤冲人</find>
       <find>url_serialize</find>
       <find>get_comic_list</find>
       <find>print</find>
+      <find>init_spider</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -76,6 +79,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost_ccpdf.py" />
+        <option value="$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py" />
       </list>
     </option>
   </component>
@@ -128,19 +132,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\python_spider\51韩漫吧" />
-      <recent name="D:\python_spider\51绅士资源吧" />
-      <recent name="D:\python_spider" />
-      <recent name="D:\python_spider\51漫画吧" />
-      <recent name="D:\python_spider\51漫画吧\动漫屋采集" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\python_spider" />
       <recent name="D:\python_spider\51漫画吧\漫画柜" />
       <recent name="D:\python_spider\小工具" />
       <recent name="D:\python_spider\51漫画吧\动漫之家" />
       <recent name="D:\python_spider\51漫画吧\CC-PDF采集" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\b2b_project\comicSpider\51漫画吧\CC-PDF采集" />
+      <recent name="D:\python_spider\51韩漫吧" />
+      <recent name="D:\python_spider\51绅士资源吧" />
+      <recent name="D:\python_spider" />
+      <recent name="D:\python_spider\51漫画吧" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -155,7 +159,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.wpPost_ccpdf">
+  <component name="RunManager" selected="Python.wpPost">
     <configuration name="指定漫画" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="comicSpider" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -904,28 +908,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="index" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="comicSpider" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/51韩漫吧/妖姬宅漫画" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/51韩漫吧/妖姬宅漫画/index.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="index2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="comicSpider" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -940,6 +922,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/51韩漫吧/妖姬宅漫画/index2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="wpPost" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="comicSpider" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/51漫画吧/CC-PDF采集" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -972,6 +976,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.wpPost" />
         <item itemvalue="Python.wpPost_ccpdf" />
       </list>
     </recent_temporary>
@@ -1082,7 +1087,7 @@
       <workItem from="1593524549975" duration="1491000" />
       <workItem from="1593939362631" duration="961000" />
       <workItem from="1608215740813" duration="294000" />
-      <workItem from="1608347548640" duration="575000" />
+      <workItem from="1608347548640" duration="10472000" />
     </task>
     <task id="LOCAL-00001" summary="更新妖姬宅，阅漫网爬虫">
       <created>1581480390597</created>
@@ -1119,11 +1124,18 @@
       <option name="project" value="LOCAL" />
       <updated>1589727879767</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="部分修改">
+      <created>1608348313876</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1608348313876</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="575000" />
+    <option name="totallyTimeSpent" value="10472000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1138,7 +1150,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1673774" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12473348" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" />
@@ -1148,7 +1160,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32998884" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.14938684" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1199,7 +1211,8 @@
     <MESSAGE value="更新妖姬宅，阅漫网爬虫" />
     <MESSAGE value="更新妖姬宅，阅漫网爬虫，小工具" />
     <MESSAGE value="更新。。。。" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新。。。。" />
+    <MESSAGE value="部分修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="部分修改" />
   </component>
   <component name="WindowStateProjectService">
     <state x="460" y="25" key="CommitChangelistDialog2" timestamp="1608215829074">
@@ -1209,12 +1222,18 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/comicSpider$wpPost_ccpdf.coverage" NAME="wpPost_ccpdf Coverage Results" MODIFIED="1608347753986" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/51漫画吧/CC-PDF采集" />
+    <SUITE FILE_PATH="coverage/comicSpider$wpPost.coverage" NAME="wpPost Coverage Results" MODIFIED="1608372415974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/51漫画吧/CC-PDF采集" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost_ccpdf.py">
+    <entry file="file://$PROJECT_DIR$/51漫画吧/CC-PDF采集/wpPost.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
-          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="1045">
+          <caret line="145" column="23" lean-forward="true" selection-start-line="145" selection-start-column="23" selection-end-line="145" selection-end-column="23" />
+          <folding>
+            <element signature="e#113#123#0" expanded="true" />
+            <element signature="e#1633#3810#0" />
+            <element signature="e#3870#4503#0" />
+          </folding>
         </state>
       </provider>
     </entry>

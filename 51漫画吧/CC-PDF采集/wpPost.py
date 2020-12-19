@@ -19,10 +19,10 @@ from datetime import datetime
 importlib.reload(sys)
 
 class WpPost(object):
-    begin_line = 2 # 第几行开始
+    begin_line = 2 # 第几行开始()
     end_line = 100 # 结束行
     step = 1
-    comic_path = 'comic_list.csv'
+    comic_path = '完结漫画列表.xlsx'
     header = {
         'cookie': 'Hm_lvt_dbc355aef238b6c32b43eacbbf161c3c=1536981553; Hm_lpvt_dbc355aef238b6c32b43eacbbf161c3c=1536986863',
         'referer': 'http://51mhb.com',
@@ -31,19 +31,26 @@ class WpPost(object):
     wp = Client('http://51mhb.com/xmlrpc.php', 'admin_wzy', 'wzy19900420wzy')
 
     # 初始化
-    def init_spider(self, begin_line, end_line, step, comic_path):
+    def init_spider(self, comic_path):
+        if comic_path:
+            self.comic_path = comic_path
+
+    def getDatas(self, begin_line, end_line, step):
         self.begin_line = begin_line  # 第几行开始
         self.end_line = end_line  # 结束行
         self.step = step  # 结束行
-        self.comic_path = comic_path
-        self.getDatas()
-
-    def getDatas(self):
         workbook = xlrd.open_workbook(self.comic_path)
         sheet = workbook.sheet_by_index(0)
         for row in range(self.begin_line, self.end_line, self.step):
             row_data = sheet.row_values(row)
             # print(row_data)
+            self.postBlog(row_data)
+
+    def getSpecificRow(self, rows):
+        workbook = xlrd.open_workbook(self.comic_path)
+        sheet = workbook.sheet_by_index(0)
+        for index in rows:
+            row_data = sheet.row_values(index)
             self.postBlog(row_data)
 
     def postBlog(self, new_blog):
@@ -122,11 +129,19 @@ startTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('开始时间：', startTime)
 wpPost = WpPost()
 
-start_num = int(input('请输入开始行数：'))
-end_num = int(input('请输入结束行数：'))
+# 初始化需要分析的表格路径
+wpPost.init_spider('comic.xls')
 
-wpPost.init_spider(start_num, end_num, 1, 'D:\python_spider\\51漫画吧\\完结漫画列表.xlsx')
+# 指定需要批量发布的漫画的开始截止行数
+# start_num = int(input('请输入开始行数：'))
+# end_num = int(input('请输入结束行数：'))
+# wpPost.getDatas(start_num, end_num, 1)
+
+# 指定特定一些需要发布漫画所在的行数，例如上一步发布失败的漫画
+rows = []
+wpPost.getSpecificRow(rows)
+
 # wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print('结束时间：', endTime)
-print("##################全部下载完成!##################")
+print("##################全部发布完成!##################")
