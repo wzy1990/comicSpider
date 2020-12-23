@@ -2,7 +2,7 @@
 # @Time    : 2020/1/1 11:20
 # @Author  : zhiyong_wang
 # @Email   : 946455381@qq.com
-# @File    : 漫客栈.py
+# @File    : 搬运网.py
 # @Software: PyCharm
 
 import requests
