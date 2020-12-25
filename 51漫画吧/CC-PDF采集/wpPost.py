@@ -36,6 +36,7 @@ class WpPost(object):
             self.comic_path = comic_path
 
     def getDatas(self, begin_line, end_line, step):
+        failList = []
         self.begin_line = begin_line  # 第几行开始
         self.end_line = end_line  # 结束行
         self.step = step  # 结束行
@@ -43,15 +44,27 @@ class WpPost(object):
         sheet = workbook.sheet_by_index(0)
         for row in range(self.begin_line, self.end_line, self.step):
             row_data = sheet.row_values(row)
-            # print(row_data)
-            self.postBlog(row_data)
+            try:
+                self.postBlog(row_data)
+            except:
+                failList.append(row)
+
+        if len(failList) > 0:
+            self.getSpecificRow(failList)
 
     def getSpecificRow(self, rows):
+        failList = []
         workbook = xlrd.open_workbook(self.comic_path)
         sheet = workbook.sheet_by_index(0)
         for index in rows:
             row_data = sheet.row_values(index)
-            self.postBlog(row_data)
+            try:
+                self.postBlog(row_data)
+            except:
+                failList.append(index)
+
+        if len(failList) > 0:
+            self.getSpecificRow(failList)
 
     def postBlog(self, new_blog):
         print('正在发布：', new_blog[1])
@@ -104,7 +117,6 @@ class WpPost(object):
             print('发布成功：', new_blog[1])
         except:
             print('发布失败：', new_blog[1])
-            pass
 
     def updateBlog(self, begin, end, comic_path):
         # 必须添加header=None，否则默认把第一行数据处理成列名导致缺失
