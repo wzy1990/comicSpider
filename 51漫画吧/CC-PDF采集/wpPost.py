@@ -75,7 +75,7 @@ class WpPost(object):
         comic_cover = '<img src="' + new_blog[6] + '" alt="" class="aligncenter size-full wp-image-154" />'
         post.content = comic_cover + '<h5>漫画简介：</h5><blockquote style="text-indent: 30px;">' + new_blog[7] + '</blockquote>'
 
-        serial_status = '精彩连载,' if '连载' in new_blog[5] else '经典完结,'
+        serial_status = '精彩连载,' if '连载' in new_blog[8] else '经典完结,'
         categorys = serial_status + new_blog[3]
         post.terms_names = {
             'post_tag': new_blog[4].split(','),  # 文章所属标签，没有则自动创建
@@ -90,7 +90,7 @@ class WpPost(object):
         post.custom_fields.append({'key': 'cao_vip_rate', 'value': 0})
         # 仅限永久VIP免费
         post.custom_fields.append({'key': 'cao_is_boosvip', 'value': 0})
-        # 启用付费下载资源 
+        # 启用付费下载资源
         post.custom_fields.append({'key': 'cao_status', 'value': 1})
         post.custom_fields.append({'key': 'wppay_type', 'value': 4})
         # 资源下载地址
