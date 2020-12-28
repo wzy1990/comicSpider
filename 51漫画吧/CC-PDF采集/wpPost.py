@@ -145,13 +145,13 @@ wpPost = WpPost()
 wpPost.init_spider('comic.xls')
 
 # 指定需要批量发布的漫画的开始截止行数
-# start_num = int(input('请输入开始行数：'))
-# end_num = int(input('请输入结束行数：'))
-# wpPost.getDatas(start_num, end_num, 1)
+start_num = int(input('请输入开始行数：'))
+end_num = int(input('请输入结束行数：'))
+wpPost.getDatas(start_num, end_num, 1)
 
 # 指定特定一些需要发布漫画所在的行数，例如上一步发布失败的漫画
-rows = []
-wpPost.getSpecificRow(rows)
+# rows = []
+# wpPost.getSpecificRow(rows)
 
 # wpPost.updateBlog(1, 2, 'comic_list.csv')
 endTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
