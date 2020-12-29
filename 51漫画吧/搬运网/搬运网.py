@@ -59,12 +59,16 @@ class Spider(object):
                     comic_cover = ''
                 
                 tags_list = []
+                comic_content = ''
                 try:
                     comic_url = comic_url.replace('./', 'http://www.zerobywswit.com/')
                     print(comic_url)
                     # 获取漫画详情页信息
                     detail_page = self.get_html(comic_url)
                     # print(detail_page)
+                    # 漫画简介
+                    comic_content = detail_page.find('div', {'class': 'uk-alert xs2 mt5 mb5 pt5 pb5'}).text
+
                     tags_html = []
                     tags_html.extend(detail_page.find_all('a', {'class': 'uk-label uk-label-border mbn'})) 
                     tags_html.extend(detail_page.find_all('span', {'class': 'uk-label uk-label-border uk-label-success mbn'}))
@@ -77,8 +81,8 @@ class Spider(object):
                     print('标签列表:', ','.join(tags_list))
                 except:
                     pass
-
-                post_list.append([comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, '', comic_url])
+                print(comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, comic_url)
+                post_list.append([comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, comic_url])
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
         #print(post_data)
