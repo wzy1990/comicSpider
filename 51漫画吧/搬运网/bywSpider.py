@@ -30,7 +30,7 @@ class Spider(object):
 
     def save_comic_detail(self, list_url, page_num, save_path):
         post_list = []
-        csv_title = ['标题', '作者', '封面', '标签', '是否完结', '内容简介', '详情地址']
+        csv_title = ['标题', '作者', '封面', '标签', '是否完结', '内容简介', '章节列表', '详情地址']
 
         for index in range(1, page_num):
             print(index)
@@ -44,9 +44,10 @@ class Spider(object):
             # print(comic_list)
             for comic in comic_list:
                 #print(comic)
-                # 漫画标题
+                # 标题
                 comic_title = comic.find('p', {'class': 'mt5 mb5 uk-text-truncate uk-text-center xs2'}).find('a').text
                 comic_url = comic.find('p', {'class': 'mt5 mb5 uk-text-truncate uk-text-center xs2'}).find('a')['href']
+                comic_url = comic_url.replace('./', 'http://www.zerobywswit.com/')
                 comic_isover = '连载中' if '连载' in comic_title else '完结'
                 comic_author = ''
                 #print(comic_title, comic_url, comic_isover)
@@ -59,30 +60,35 @@ class Spider(object):
                     comic_cover = ''
                 
                 tags_list = []
+                comic_capter_list = []
                 comic_content = ''
                 try:
-                    comic_url = comic_url.replace('./', 'http://www.zerobywswit.com/')
                     print(comic_url)
-                    # 获取漫画详情页信息
+                    # 获取详情页信息
                     detail_page = self.get_html(comic_url)
-                    # print(detail_page)
-                    # 漫画简介
+                    # 简介
                     comic_content = detail_page.find('div', {'class': 'uk-alert xs2 mt5 mb5 pt5 pb5'}).text
-
+                    # 章节列表
+                    comic_capter_list = []
+                    comic_capters = detail_page.find_all('div', {'class': 'muludiv'})
+                    for capter in comic_capters:
+                        capter_url = capter.find('a')['href'].replace('./', 'http://www.zerobywswit.com/')
+                        print(capter_url)
+                        comic_capter_list.append(capter_url)
+                    # 标签列表
                     tags_html = []
                     tags_html.extend(detail_page.find_all('a', {'class': 'uk-label uk-label-border mbn'})) 
                     tags_html.extend(detail_page.find_all('span', {'class': 'uk-label uk-label-border uk-label-success mbn'}))
-                   
                     for tags in tags_html:
                         if '作者' in tags.text:
                             comic_author = tags.text
                         else:
                             tags_list.append(tags.text)
-                    print('标签列表:', ','.join(tags_list))
+                    print('tags:', ','.join(tags_list))
                 except:
                     pass
                 print(comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, comic_url)
-                post_list.append([comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, comic_url])
+                post_list.append([comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, ','.join(comic_capter_list), comic_url])
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
         #print(post_data)
