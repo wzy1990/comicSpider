@@ -87,7 +87,7 @@ class Spider(object):
                     print('tags:', ','.join(tags_list))
                 except:
                     pass
-                print(comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, comic_url)
+                print(','.join(comic_capter_list))
                 post_list.append([comic_title, comic_author, comic_cover, ','.join(tags_list), comic_isover, comic_content, ','.join(comic_capter_list), comic_url])
 
         post_data = pd.DataFrame(columns=csv_title, data=post_list)
@@ -95,7 +95,7 @@ class Spider(object):
         post_data.to_csv(save_path, encoding='utf8')
 
     def init(self):
-        self.save_comic_detail(self.comic_url, 2, '漫画列表.csv')
+        self.save_comic_detail(self.comic_url, 2, 'comic_list.csv')
 
 
 spider = Spider()
