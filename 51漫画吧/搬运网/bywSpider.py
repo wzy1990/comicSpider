@@ -95,7 +95,7 @@ class Spider(object):
         post_data.to_csv(save_path, encoding='utf8')
 
     def init(self):
-        self.save_comic_detail(self.comic_url, 2, 'comic_list.csv')
+        self.save_comic_detail(self.comic_url, 72, 'comic_list.csv')
 
 
 spider = Spider()
