@@ -54,7 +54,7 @@ class Downloader(object):
         for link in chapter_links:
             try:
                 chapter_html = self.get_html(link)
-                # print(chapter_html)
+                print(chapter_html)
                 chapter_title = chapter_html.find('h3', {'class': 'uk-heading-line uk-text-center'}).text
                 print('当前章节： ', chapter_title)
                 self.chapter_save_path = self.comic_save_path + '\\' + chapter_title
@@ -65,12 +65,7 @@ class Downloader(object):
                     path.mkdir()
 
                 image_list = chapter_html.find_all('div', {'class': 'uk-text-center mb0'})
-                # self.download_image(image_list)
-                # 开启多线程
-                pool = ThreadPool(8) # Sets the pool size to 4
-                results = pool.map(self.download_image, image_list)
-                pool.close();
-                pool.join();
+                self.download_image(image_list)
             except Exception as e:
                 print(e)
         
