@@ -17,7 +17,7 @@ class Spider(object):
         'Cookie': '__cfduid=dfd2b8af05a90dd9077ccf6a9fd2f0cee1608729874; kd5S_2132_saltkey=iX45GG1F; kd5S_2132_lastvisit=1608726274; kd5S_2132_forum_lastvisit=D_103_1608731594D_70_1608731631; kd5S_2132_visitedfid=70D103D46; kd5S_2132_ulastactivity=f4523Bme1ThurQk9ck3n28sumstq127NjzGKkxBzBKjAwZHUMOdI; kd5S_2132_lastcheckfeed=2455716%7C1609163172; kd5S_2132_auth=6539SQSxReTdqYoTJC8rpL6EfogBvXI5De8C2HRUbAssHUNQgzPPq2SpN4aXLTb4Xw%2FfLzBDxDe8ePPB0GdyN0imLDeS; kd5S_2132_tshuz_accountlogin=2455716; kd5S_2132_manhuakaiguan=1; kd5S_2132_manhuamoshi=2; kd5S_2132_manhua_pcadvcookie=10; kd5S_2132_sid=dtb2oO; kd5S_2132_lip=112.97.213.123%2C1609163172; kd5S_2132_lastact=1609164925%09plugin.php%09'
     }
     comic_url = 'http://www.zerobywswit.com/plugin.php?id=jameson_manhua&c=index&a=ku&jindu=1&page={}'
-    comic_url2 = 'http://www.zerobywswit.com/plugin.php?id=jameson_manhua&c=index&a=ku&jindu=1&page={}'
+    comic_url2 = 'http://www.zerobywswit.com/plugin.php?id=jameson_manhua&c=index&a=ku&category_id=1&jindu=1&page={}'          
     comic_save_path = ''
     chapter_save_path = ''
 

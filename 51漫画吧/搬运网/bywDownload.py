@@ -19,9 +19,10 @@ class Downloader(object):
     comic_save_path = ''
     chapter_save_path = ''
     headers = {
+        'Connection': 'keep-alive',
         'Host': 'www.zerobywswit.com',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
-        'Cookie': 'kd5S_2132_saltkey=Y681pg8c; kd5S_2132_lastvisit=1608698229; __cfduid=de39030de4434d811716bd1f2b8d021c71608816056; kd5S_2132_nofavfid=1; kd5S_2132_manhuakaiguan=1; kd5S_2132_manhuamoshi=2; kd5S_2132_sendmail=1; kd5S_2132_sid=lUdL8E; kd5S_2132_ulastactivity=5393IDwHv%2BsNKRBc9wo7%2BpJ4zXLpezRBjGMMqYQkZCTcT5br4VPF; kd5S_2132_lastcheckfeed=2455716%7C1609331082; kd5S_2132_checkfollow=1; kd5S_2132_lastact=1609331082%09plugin.php%09; kd5S_2132_manhua_pcadvcookie=3; kd5S_2132_auth=f001%2FrMc5nRgZTz0Vx4zVWftVcKg%2FpcONXM4%2BLI3hFmfyXJJoB53rE029nfx1dbfCtI5pkAjwAD4FY20uf9JVKlKx9hB; kd5S_2132_tshuz_accountlogin=2455716'
+        'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+        'Cookie': 'kd5S_2132_saltkey=Y681pg8c; kd5S_2132_lastvisit=1608698229; __cfduid=de39030de4434d811716bd1f2b8d021c71608816056; kd5S_2132_nofavfid=1; kd5S_2132_manhuakaiguan=1; kd5S_2132_manhuamoshi=2; kd5S_2132_lastcheckfeed=2455716%7C1609331082; kd5S_2132_manhua_pcadvcookie=5; kd5S_2132_creditnotice=0D0D2D0D0D0D0D0D0D2455716; kd5S_2132_creditbase=0D0D16D0D0D0D0D0D0; kd5S_2132_creditrule=%E6%AF%8F%E5%A4%A9%E7%99%BB%E5%BD%95; kd5S_2132_ulastactivity=f71eJBP%2F55uWoMMAdOC%2FNcALNrNvEa03e3xNDETEZKdRRZBwftVM; kd5S_2132_auth=a0709A2AGHLbWE%2BJMsD3M%2B8Qdk04bCnNL90mWRiS424A7E6PwkW5iwV5UZ7WPwWKjanZTXwSxtr88vbjud3S2ibSi9JH; kd5S_2132_tshuz_accountlogin=2455716; kd5S_2132_sid=P9e629; kd5S_2132_lip=113.111.7.79%2C1609402079; kd5S_2132_lastact=1609402093%09home.php%09spacecp'
     }
 
     # 获取网页信息
@@ -53,6 +54,7 @@ class Downloader(object):
         for link in chapter_links:
             try:
                 chapter_html = self.get_html(link)
+                # print(chapter_html)
                 chapter_title = chapter_html.find('h3', {'class': 'uk-heading-line uk-text-center'}).text
                 print('当前章节： ', chapter_title)
                 self.chapter_save_path = self.comic_save_path + '\\' + chapter_title
@@ -63,7 +65,12 @@ class Downloader(object):
                     path.mkdir()
 
                 image_list = chapter_html.find_all('div', {'class': 'uk-text-center mb0'})
-                self.download_image(image_list)
+                # self.download_image(image_list)
+                # 开启多线程
+                pool = ThreadPool(8) # Sets the pool size to 4
+                results = pool.map(self.download_image, image_list)
+                pool.close();
+                pool.join();
             except Exception as e:
                 print(e)
         
